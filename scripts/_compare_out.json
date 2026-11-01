@@ -1,0 +1,609 @@
+[
+ {
+  "pid": 7122951831719,
+  "skus": [
+   "CS-TVR500VX_Amarey_77_0"
+  ],
+  "status": "active",
+  "title": "Battery for Amarey A800 A900",
+  "handle": "battery-for-amarey-a800-a900",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "A800, A900",
+  "body_chars": 1448,
+  "body_head": "Battery Specifications <br> <br>\n<div style=\"display: flex;\" width=\"100%\">\n<tabl",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Amarey_77_0",
+   "price": "39.37",
+   "grams": 0,
+   "barcode": null,
+   "inv": "shopify",
+   "option": "2600mAh"
+  }
+ },
+ {
+  "pid": 7123954434215,
+  "skus": [
+   "CS-TVR500VX_Tesvor_77_0"
+  ],
+  "status": "active",
+  "title": "Battery for Tesvor M1 N1 S3 S6 Turbo Simum 6 Simum 7 Simum 8 Simum 9 T8 V300 V6 X500 X500 Pro X580 X580R X583 X586 SUN-INTE-172",
+  "handle": "battery-for-tesvor-m1-n1-s3-s6-turbo-simum-6-simum-7-simum-8-simum-9-t8-v300-v6-x500-x500-pro-x580-x580r-x583-x586-sun-inte-172",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "M1, N1, S3, S6 Turbo, Simum 6, Simum 7, Simum 8, Simum 9, SUN-INTE-172, T8, V300, V6, X500, X500 Pro, X580, X580R, X583, X586",
+  "body_chars": 1786,
+  "body_head": "Battery Specifications <br> <br>\n<div style=\"display: flex;\" width=\"100%\">\n<tabl",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Tesvor_77_0",
+   "price": "39.37",
+   "grams": 0,
+   "barcode": null,
+   "inv": "shopify",
+   "option": "2600mAh"
+  }
+ },
+ {
+  "pid": 7124086456487,
+  "skus": [
+   "CS-TVR500VX_Ikohs_77_0"
+  ],
+  "status": "active",
+  "title": "Battery for Ikohs Netbot S15",
+  "handle": "battery-for-ikohs-netbot-s15",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "Netbot S15",
+  "body_chars": 1432,
+  "body_head": "Battery Specifications <br> <br>\n<div style=\"display: flex;\" width=\"100%\">\n<tabl",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Ikohs_77_0",
+   "price": "39.37",
+   "grams": 0,
+   "barcode": null,
+   "inv": "shopify",
+   "option": "2600mAh"
+  }
+ },
+ {
+  "pid": 7124263305383,
+  "skus": [
+   "CS-TVR500VX_iMartine_77_0"
+  ],
+  "error": "Shopify API 错误 HTTP 404: products/7124263305383.json"
+ },
+ {
+  "pid": 15476051214580,
+  "skus": [
+   "CS-TVR500VX_Goovi_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Goovi D380 D382 F007C",
+  "handle": "battery-for-goovi-d380-d382-f007c",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 909,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Goovi_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051280116,
+  "skus": [
+   "CS-TVR500VX_Sencor_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Sencor SRV 9150WH SRX-0911",
+  "handle": "battery-for-sencor-srv-9150wh-srx-0911",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 898,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Sencor_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051345652,
+  "skus": [
+   "CS-TVR500VX_Lefant_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Lefant M1 Robot Vacuum Cleaner (4S1P Revsion) M3 Max M210 M210B M210P M213 M213S M310 M310 Ultra M330 Pro T700 T800",
+  "handle": "battery-for-lefant-m1-robot-vacuum-cleaner-4s1p-revsion-m3-max-m210-m210b-m210p-m213-m213s-m310-m310",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 1147,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Lefant_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051411188,
+  "skus": [
+   "CS-TVR500VX_Ikohs Create_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Ikohs Create Netbot S10 Netbot S12 Netbot S14 Netbot S15",
+  "handle": "battery-for-ikohs-create-netbot-s10-netbot-s12-netbot-s14-netbot-s15",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 960,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Ikohs Create_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051509492,
+  "skus": [
+   "CS-TVR500VX_SereneLife_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for SereneLife PUCRC660 PUCRC675",
+  "handle": "battery-for-serenelife-pucrc660-pucrc675",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 900,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_SereneLife_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051575028,
+  "skus": [
+   "CS-TVR500VX_OKP_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for OKP K3P (14.4V Version) K4 (14.4V Version) K5 (14.4V Version) K7 (14.4V Version) Life K2 (14.4V Version)",
+  "handle": "battery-for-okp-k3p-14-4v-version-k4-14-4v-version-k5-14-4v-version-k7-14-4v-version-life-k2-14-4v-v",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 1024,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_OKP_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051640564,
+  "skus": [
+   "CS-TVR500VX_Tikom_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Tikom G8000 L9000",
+  "handle": "battery-for-tikom-g8000-l9000",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 889,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Tikom_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051673332,
+  "skus": [
+   "CS-TVR500VX_Umax_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Umax U-Smart",
+  "handle": "battery-for-umax-u-smart",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 868,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Umax_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051738868,
+  "skus": [
+   "CS-TVR500VX_Ultenic_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Ultenic H18650CH-4S1P",
+  "handle": "battery-for-ultenic-h18650ch-4s1p",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 877,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Ultenic_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051804404,
+  "skus": [
+   "CS-TVR500VX_Tesla_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Tesla RoboStar iQ300",
+  "handle": "battery-for-tesla-robostar-iq300",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 876,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Tesla_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051902708,
+  "skus": [
+   "CS-TVR500VX_iHome_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for iHome AUTOVAC Nova Classic Eclipse Pro Robot Vacuum iHRV6-BLK iHRV10-BLK iHRV11 iHRV11-BLK iHRV11-BLK iHRV12-BLK iHRV13-BLK",
+  "handle": "battery-for-ihome-autovac-nova-classic-eclipse-pro-robot-vacuum-ihrv6-blk-ihrv10-blk-ihrv11-ihrv11-b",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 1107,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_iHome_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476051968244,
+  "skus": [
+   "CS-TVR500VX_HOBOT_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for HOBOT Legee 668 Legee 669",
+  "handle": "battery-for-hobot-legee-668-legee-669",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 897,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_HOBOT_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052033780,
+  "skus": [
+   "CS-TVR500VX_Onson_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Onson F007 J10C",
+  "handle": "battery-for-onson-f007-j10c",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 887,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Onson_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052099316,
+  "skus": [
+   "CS-TVR500VX_Denkee_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Denkee DK600",
+  "handle": "battery-for-denkee-dk600",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 868,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Denkee_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052197620,
+  "skus": [
+   "CS-TVR500VX_Coredy_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Coredy R300 R500 R500+ R550 R580 R600 R650 R750-1600Pa R3500 R3500S",
+  "handle": "battery-for-coredy-r300-r500-r500-r550-r580-r600-r650-r750-1600pa-r3500-r3500s",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 1067,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Coredy_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052263156,
+  "skus": [
+   "CS-TVR500VX_Yeedi_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Yeedi K600 K650 K680 K700",
+  "handle": "battery-for-yeedi-k600-k650-k680-k700",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 929,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Yeedi_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052328692,
+  "skus": [
+   "CS-TVR500VX_Bagotte_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Bagotte BG600 BG600 MAX BG600 Robotic Vacuum Cleaner BG700 BG750 H18650CH-4S1P",
+  "handle": "battery-for-bagotte-bg600-bg600-max-bg600-robotic-vacuum-cleaner-bg700-bg750-h18650ch-4s1p",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 986,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Bagotte_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052394228,
+  "skus": [
+   "CS-TVR500VX_Deenkee_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Deenkee D30 DK600 DK600 Max DK600 MAX Robot Vacuum Cleaner DK700",
+  "handle": "battery-for-deenkee-d30-dk600-dk600-max-dk600-max-robot-vacuum-cleaner-dk700",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 984,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Deenkee_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052459764,
+  "skus": [
+   "CS-TVR500VX_Pyle_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Pyle PUCRC660 PUCRC675",
+  "handle": "battery-for-pyle-pucrc660-pucrc675",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 894,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Pyle_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052492532,
+  "skus": [
+   "CS-TVR500VX_Pure Clean_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Pure Clean PUCRC660 PUCRC675 PUCRC850",
+  "handle": "battery-for-pure-clean-pucrc660-pucrc675-pucrc850",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 925,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Pure Clean_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ },
+ {
+  "pid": 15476052525300,
+  "skus": [
+   "CS-TVR500VX_Ionvac_77_0"
+  ],
+  "status": "draft",
+  "title": "Battery for Ionvac Optimax UltraClean UV Optimax UltraClean UV Roboti SmartClean 2000 SmartClean 2000 Robovac SmartClean V4",
+  "handle": "battery-for-ionvac-optimax-ultraclean-uv-optimax-ultraclean-uv-roboti-smartclean-2000-smartclean-200",
+  "vendor": "Bomibattery",
+  "product_type": "Vacuum Battery",
+  "tags": "",
+  "body_chars": 1031,
+  "body_head": "<p>We are professional battery supplier, carrying anything named BATTERIES. We s",
+  "options": [
+   "Title"
+  ],
+  "v": {
+   "sku": "CS-TVR500VX_Ionvac_77_0",
+   "price": "32.00",
+   "grams": 270,
+   "barcode": "4894128168935",
+   "inv": "shopify",
+   "option": "Default Title"
+  }
+ }
+]

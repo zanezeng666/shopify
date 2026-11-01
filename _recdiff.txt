@@ -1,0 +1,41 @@
+﻿cs_catalog: {'records': 22143, 'unique_cs_ids': 14691, 'on_sale_records': 22132, 'discontinued_records': 11}
+store_side: {'variants': 24003, 'anchored': 23976, 'unanchored': 27, 'unique_cs_ids': 11843}
+to_create=5791 to_update=22527 archive=2 orphan=713 brand_mismatch=129 unchanged=1
+barcode: fill=22527 conflict=0 | price drift=21552 suspicious=275
+
+create sample:
+[
+ {
+  "cs_id": "CS-DRV500VX",
+  "brand": "Mova",
+  "title": "Battery for Mova RCVE0202 RLV72LE-1 V50 Ultra R2401-4S2P-MMYD",
+  "handle": "battery-for-mova-rcve0202-rlv72le-1-v50-ultra-r2401-4s2p-mmyd",
+  "sku": "CS-DRV500VX_Mova_0_0",
+  "price": "61.00",
+  "grams": 500,
+  "barcode": "4894128231134"
+ },
+ {
+  "cs_id": "CS-HSA602BT",
+  "brand": "Yale",
+  "title": "Battery for Yale IA-320 IA-330 IA-340 Smart hub 2.0 SR-310 SR-320 SR-330 SR-340 SR-HUB 2.0 YNC IA-310 802306043H2",
+  "handle": "battery-for-yale-ia-320-ia-330-ia-340-smart-hub-2-0-sr-310-sr-320-sr-330-sr-340-sr-hub-2-0-ync-ia-31",
+  "sku": "CS-HSA602BT_Yale_0_0",
+  "price": "23.00",
+  "grams": 160,
+  "barcode": "4894128231110"
+ },
+ {
+  "cs_id": "CS-JBT230SL",
+  "brand": "JBL",
+  "title": "Battery for JBL Tune 230NC Charging Case Tune Beam 230NC Charging Case Tune Beam Earbuds charging Case GSP961642",
+  "handle": "battery-for-jbl-tune-230nc-charging-case-tune-beam-230nc-charging-case-tune-beam-earbuds-charging-ca",
+  "sku": "CS-JBT230SL_JBL_0_0",
+  "price": "26.00",
+  "grams": 60,
+  "barcode": "4894128231103"
+ }
+]
+
+mismatch sample: [{"sku": "CS-FNV132TW_Vertex_75_0", "cs_id": "CS-FNV132TW", "sku_brand": "vertex", "cs_brands": ["vertex standard", "yaesu"]}, {"sku": "CS-NP50FU_Lectrosonics_2_0", "cs_id": "CS-NP50FU", "sku_brand": "lectrosonics", "cs_brands": ["-", "fujifilm", "jupio", "pentax", "ricoh"]}, {"sku": "CS-MDR654SL_Chuvin Arnoux_72_0", "cs_id": "CS-MDR654SL", "sku_brand": "chuvin arnoux", "cs_brands": ["chauvin arnoux", "megger"]}, {"sku": "CS-AYD810CL_Aastra_12_0", "cs_id": "CS-AYD810CL", "sku_brand": "aastra", "cs_brands": ["ascom", "avaya", "detewe", "innovaphone"]}, {"sku": "CS-AYD810CL_Mitel_12_0", "cs_id": "CS-AYD810CL", "sku_brand": "mitel", "cs_brands": ["ascom", "avaya", "detewe", "innovaphone"]}]
+archive sample: [{"cs_id": "CS-MTC380SL", "brand": "Mettler Toledo", "reason": "cs_discontinued", "variant_skus": ["CS-MTC380SL_Mettler_27_0"], "shopify_product_ids": [4626617073764]}, {"cs_id": "CS-MTL221SL", "brand": "Megalite", "reason": "cs_discontinued", "variant_skus": ["CS-MTL221SL_Megalite_27_0"], "shopify_product_ids": [7122494095527]}]

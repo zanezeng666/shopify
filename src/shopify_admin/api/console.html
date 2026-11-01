@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopify Admin · 接口测试台</title>
+<style>
+:root{
+  --bg:#0f1419;--panel:#161d26;--panel2:#1c2530;--line:#2a3644;
+  --fg:#dbe4ee;--dim:#8aa0b4;--accent:#4da3ff;--accent2:#2d7dd2;
+  --green:#3ecf8e;--orange:#f5a623;--red:#ff6b6b;--purple:#b58cff;
+  --mono:'Cascadia Code',Consolas,'Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Segoe UI','Microsoft YaHei',sans-serif;padding-bottom:60px}
+a{color:var(--accent);text-decoration:none}
+
+header{display:flex;align-items:center;gap:16px;padding:14px 22px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+header h1{font-size:17px;font-weight:600;white-space:nowrap}
+header h1 .tag{font-size:11px;color:var(--dim);font-weight:400;margin-left:8px}
+.spacer{flex:1}
+input,select,textarea,button{font:inherit;color:var(--fg);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 10px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+input#apiKey{width:280px}
+button{cursor:pointer;transition:.15s}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600;padding:7px 22px}
+button.primary:hover{background:var(--accent)}
+button.primary:disabled{opacity:.5;cursor:wait}
+button.mini{padding:2px 9px;font-size:12px;border-radius:5px}
+
+/* ---- 总览卡 ---- */
+#overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:16px 22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card h3{font-size:12px;color:var(--dim);font-weight:600;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .big{font-size:20px;font-weight:700}
+.card .sub{font-size:12px;color:var(--dim);margin-top:2px;word-break:break-all}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dot.g{background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot.r{background:var(--red);box-shadow:0 0 6px var(--red)}
+.dot.y{background:var(--orange)}
+.taskrow{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px}
+.taskrow code{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.taskrow .cron{color:var(--dim);font-size:11px;font-family:var(--mono)}
+.runlog{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6px;white-space:pre-wrap;word-break:break-all;max-height:110px;overflow:auto}
+
+/* ---- 主体 ---- */
+#layout{display:flex;gap:14px;padding:0 22px;align-items:flex-start}
+#sidebar{width:340px;flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:sticky;top:76px;max-height:calc(100vh - 92px);display:flex;flex-direction:column}
+#search{margin:10px;width:calc(100% - 20px)}
+#epList{overflow-y:auto;padding:0 10px 12px}
+.taghead{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin:12px 2px 4px}
+.ep{display:flex;gap:8px;align-items:baseline;padding:6px 8px;border-radius:7px;cursor:pointer;border:1px solid transparent}
+.ep:hover{background:var(--panel2)}
+.ep.active{background:var(--panel2);border-color:var(--accent)}
+.ep .m{font-family:var(--mono);font-size:10.5px;font-weight:700;width:44px;flex-shrink:0}
+.ep .p{font-family:var(--mono);font-size:12px;word-break:break-all}
+.ep .s{font-size:11px;color:var(--dim);margin-left:2px}
+.m.GET{color:var(--green)}.m.POST{color:var(--accent)}.m.PUT{color:var(--orange)}.m.DELETE{color:var(--red)}.m.PATCH{color:var(--purple)}
+
+#main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.panel h2{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel .desc{color:var(--dim);font-size:12.5px;margin-top:4px}
+.urlbox{font-family:var(--mono);font-size:13px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:8px 12px;margin-top:10px;word-break:break-all}
+.field{margin-top:12px}
+.field label{font-size:12.5px;font-weight:600;display:block;margin-bottom:4px}
+.field label .req{color:var(--red)}
+.field label .opt{color:var(--dim);font-weight:400;font-size:11px;margin-left:6px}
+.field .hint{font-size:11.5px;color:var(--dim);margin-top:3px}
+.field input,.field select{width:100%;max-width:480px}
+textarea{width:100%;min-height:140px;font-family:var(--mono);font-size:12.5px;line-height:1.5;resize:vertical;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.actions{margin-top:16px;display:flex;gap:10px;align-items:center}
+#respHead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.status{font-family:var(--mono);font-weight:700;font-size:15px;padding:2px 12px;border-radius:6px}
+.status.s2{color:var(--green);background:rgba(62,207,142,.12)}
+.status.s4{color:var(--orange);background:rgba(245,166,35,.12)}
+.status.s5{color:var(--red);background:rgba(255,107,107,.12)}
+.status.err{color:var(--red);background:rgba(255,107,107,.12)}
+.ms{color:var(--dim);font-family:var(--mono);font-size:12px}
+pre#respBody{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:var(--mono);font-size:12.5px;line-height:1.55;overflow:auto;max-height:520px;white-space:pre}
+.jk{color:#7ec8ff}.js{color:#a8d98a}.jn{color:#f5a623}.jb{color:#b58cff}
+.histrow{display:flex;gap:10px;align-items:center;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:12px}
+.histrow:hover{background:var(--panel2)}
+.histrow .t{color:var(--dim);font-size:11px}
+.empty{color:var(--dim);text-align:center;padding:40px 0;font-size:13px}
+footer{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);padding:6px 22px;font-size:11.5px;color:var(--dim);display:flex;gap:18px}
+@media(max-width:980px){#layout{flex-direction:column}#sidebar{width:100%;position:static;max-height:340px}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛍️ Shopify Admin 接口测试台<span class="tag">REST 全接口 · 自动发现</span></h1>
+  <div class="spacer"></div>
+  <input id="apiKey" placeholder="X-API-Key（未启用鉴权可留空）">
+  <button onclick="loadAll()">刷新接口</button>
+  <span id="apiCount" style="color:var(--dim);font-size:12px"></span>
+</header>
+
+<div id="overview">
+  <div class="card" id="cardHealth"><h3><span class="dot y"></span>服务健康</h3><div class="sub">检测中…</div></div>
+  <div class="card" id="cardStores"><h3>🏪 店铺</h3><div class="sub">加载中…</div></div>
+  <div class="card" id="cardJobs"><h3>⏰ 定时任务（▶ 立即运行）</h3><div class="sub">加载中…</div></div>
+  <div class="card" id="cardRecent"><h3>📜 最近任务执行</h3><div class="sub">加载中…</div></div>
+</div>
+
+<div id="layout">
+  <aside id="sidebar">
+    <input id="search" placeholder="🔍 搜索路径 / 描述…">
+    <div id="epList"><div class="empty">加载 OpenAPI 中…</div></div>
+  </aside>
+  <section id="main">
+    <div class="panel" id="epPanel">
+      <div class="empty">← 在左侧选择一个接口开始测试</div>
+    </div>
+    <div class="panel" id="respPanel" style="display:none">
+      <h3 style="font-size:12px;color:var(--dim);letter-spacing:.5px;margin-bottom:8px">响应</h3>
+      <div id="respHead"></div>
+      <pre id="respBody"></pre>
+    </div>
+    <div class="panel" id="histPanel">
+      <h3 style="font-size:12px;color:var(--dim);letter-spacing:.5px">调用历史（本机保存最近 30 条）</h3>
+      <div id="histList" style="margin-top:8px"><div class="empty">暂无调用</div></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <span>接口文档（Swagger）：<a href="/docs" target="_blank">/docs</a></span>
+  <span>原始定义：<a href="/openapi.json" target="_blank">/openapi.json</a></span>
+  <span>定时任务审计与调度共用 @task_record，手动触发结果同样入库</span>
+</footer>
+
+<script>
+"use strict";
+let SPEC=null, EPS=[], cur=null, selectedKey=null;
+
+/* ---------------- OpenAPI 加载与接口发现 ---------------- */
+async function loadAll(){
+  document.getElementById('apiKey').value = localStorage.getItem('apiKey')||'';
+  try{
+    const r=await fetch('/openapi.json'); SPEC=await r.json();
+  }catch(e){
+    document.getElementById('epList').innerHTML='<div class="empty">❌ 无法加载 /openapi.json<br><br>'+esc(e.message)+'</div>';
+    return;
+  }
+  EPS=[];
+  for(const [path,methods] of Object.entries(SPEC.paths||{})){
+    for(const [method,op] of Object.entries(methods)){
+      if(method==='parameters'||method.startsWith('x-')) continue;
+      EPS.push({key:method.toUpperCase()+' '+path, method:method.toUpperCase(), path,
+        tag:(op.tags&&op.tags[0])||'其他', summary:op.summary||'', op,
+        params:[...((SPEC.paths[path].parameters)||[]), ...(op.parameters||[])]});
+    }
+  }
+  const tags=[...new Set(EPS.map(e=>e.tag))];
+  EPS.sort((a,b)=>tags.indexOf(a.tag)-tags.indexOf(b.tag)||a.path.localeCompare(b.path));
+  document.getElementById('apiCount').textContent=EPS.length+' 个接口';
+  renderList();
+}
+function renderList(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const box=document.getElementById('epList'); let html='',lastTag='';
+  for(const e of EPS){
+    if(q && !(e.path.toLowerCase().includes(q)||(e.summary||'').toLowerCase().includes(q))) continue;
+    if(e.tag!==lastTag){html+='<div class="taghead">'+esc(e.tag)+'</div>';lastTag=e.tag;}
+    html+='<div class="ep'+(e.key===selectedKey?' active':'')+'" onclick="selectEp(\''+e.key.replace(/'/g,"\\'")+'\')">'
+        +'<span class="m '+e.method+'">'+e.method+'</span>'
+        +'<span class="p">'+esc(e.path)+(e.summary?'<span class="s"> · '+esc(e.summary)+'</span>':'')+'</span></div>';
+  }
+  box.innerHTML=html||'<div class="empty">无匹配接口</div>';
+}
+document.getElementById('search').addEventListener('input',renderList);
+
+/* ---------------- 示例值生成（schema → 预填数据） ---------------- */
+function sample(schema,depth,seen){
+  if(!schema||depth>4) return null;
+  if(schema.$ref){
+    const name=schema.$ref.split('/').pop();
+    if(seen.has(name)) return null;             // 循环引用截断
+    const s=(SPEC.components&&SPEC.components.schemas&&SPEC.components.schemas[name])||{};
+    const v=sample({...s},depth+1,new Set([...seen,name]));
+    return v===undefined?null:v;
+  }
+  if(schema.example!==undefined) return schema.example;
+  if(schema.default!==undefined) return schema.default;
+  if(schema.enum&&schema.enum.length) return schema.enum[0];
+  if(Array.isArray(schema.type)) schema.type=schema.type[0];
+  switch(schema.type){
+    case 'object':{
+      if(!schema.properties) return {};
+      const o={};
+      for(const [k,v] of Object.entries(schema.properties)) o[k]=sample(v,depth+1,seen);
+      return o;
+    }
+    case 'array': return schema.items?[sample(schema.items,depth+1,seen)]:[];
+    case 'integer': return 0;
+    case 'number': return 0;
+    case 'boolean': return false;
+    case 'string':
+      if(schema.format==='date-time') return new Date().toISOString();
+      if(schema.format==='date') return new Date().toISOString().slice(0,10);
+      return '示例文本';
+    default:
+      if(schema.properties){const o={};for(const [k,v] of Object.entries(schema.properties))o[k]=sample(v,depth+1,seen);return o;}
+      return null;
+  }
+}
+const fmtDoc=(s)=>s?('：'+s):'';
+
+/* ---------------- 接口选择与表单渲染 ---------------- */
+function selectEp(key){
+  selectedKey=key; renderList();
+  const e=EPS.find(x=>x.key===key); if(!e) return; cur=e;
+  const p=document.getElementById('epPanel');
+  let h='<h2><span class="m '+e.method+'">'+e.method+'</span><span style="font-family:var(--mono);font-size:14px">'+esc(e.path)+'</span></h2>';
+  if(e.summary) h+='<div class="desc">'+esc(e.summary)+'</div>';
+  if(e.op.description) h+='<div class="desc">'+esc(e.op.description).slice(0,300)+'</div>';
+
+  // path / query 参数
+  const params=e.params.filter(p=>['path','query'].includes(p.in));
+  if(params.length){
+    h+='<div class="grid2">';
+    for(const prm of params){
+      const sch=prm.schema||{};
+      const label=esc(prm.name)+(prm.required?' <span class="req">*</span>':'<span class="opt">可选</span>');
+      h+='<div class="field"><label>'+label+'</label>';
+      if(sch.enum){
+        h+='<select data-p="'+esc(prm.name)+'" data-in="'+prm.in+'">'
+          +sch.enum.map(v=>'<option'+(v===sch.default?' selected':'')+'>'+esc(v)+'</option>').join('')+'</select>';
+      }else{
+        const t=sch.type==='integer'||sch.type==='number'?'number':'text';
+        const pre=sch.example??sch.default??(prm.required?'':'');
+        h+='<input data-p="'+esc(prm.name)+'" data-in="'+prm.in+'" type="'+t+'" value="'+esc(String(pre))+'" placeholder="'+esc(prm.description||'')+'">';
+      }
+      if(prm.description) h+='<div class="hint">'+esc(prm.description)+fmtDoc(sch.default!==undefined?('默认 '+sch.default):'')+'</div>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  // body
+  const body=e.op.requestBody;
+  if(body){
+    const json=body.content&&body.content['application/json'];
+    if(json){
+      const pre=JSON.stringify(sample(json.schema||{},0,new Set()),null,2);
+      h+='<div class="field"><label>请求体 JSON<span class="opt">application/json · 已按 schema 生成示例，可编辑</span></label>'
+        +'<textarea id="body">'+esc(pre)+'</textarea></div>';
+    }
+  }
+  h+='<div class="actions"><button class="primary" id="sendBtn" onclick="send()">▶ 发送请求</button>'
+    +'<span style="color:var(--dim);font-size:12px">'+(body?'含请求体':'无请求体')+' · '+params.length+' 个参数</span></div>';
+  p.innerHTML=h;
+  document.getElementById('respPanel').style.display='none';
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ---------------- 请求发送 ---------------- */
+async function send(){
+  if(!cur) return;
+  const btn=document.getElementById('sendBtn'); btn.disabled=true; btn.textContent='发送中…';
+  const t0=performance.now();
+  let url=cur.path, query=[];
+  document.querySelectorAll('[data-p]').forEach(el=>{
+    const v=el.value.trim(); if(!v) return;
+    if(el.dataset.in==='path') url=url.replace('{'+el.dataset.p+'}',encodeURIComponent(v));
+    else query.push(encodeURIComponent(el.dataset.p)+'='+encodeURIComponent(v));
+  });
+  if(query.length) url+='?'+query.join('&');
+  const headers={};
+  const key=document.getElementById('apiKey').value.trim();
+  localStorage.setItem('apiKey',key);
+  if(key) headers['X-API-Key']=key;
+  let opt={method:cur.method,headers};
+  const ta=document.getElementById('body');
+  if(ta&&ta.value.trim()){
+    try{ opt.body=JSON.stringify(JSON.parse(ta.value)); headers['Content-Type']='application/json'; }
+    catch(err){ showResp(null,'- 请求体不是合法 JSON：'+err.message,0); btn.disabled=false; btn.textContent='▶ 发送请求'; return; }
+  }
+  let status,text;
+  try{
+    const r=await fetch(url,opt);
+    status=r.status;
+    const raw=await r.text();
+    try{ text=JSON.stringify(JSON.parse(raw),null,2); }catch(_){ text=raw; }
+  }catch(err){ status=null; text='网络错误：'+err.message+'\n（服务未启动？或检查代理/端口）'; }
+  const ms=Math.round(performance.now()-t0);
+  showResp(status,text,ms);
+  pushHist({m:cur.method,u:url,s:status,ms,t:new Date().toLocaleTimeString()});
+  btn.disabled=false; btn.textContent='▶ 发送请求';
+}
+function showResp(status,text,ms){
+  document.getElementById('respPanel').style.display='';
+  const head=document.getElementById('respHead');
+  const cls=status==null?'err':('s'+String(status)[0]);
+  head.innerHTML='<span class="status '+cls+'">'+(status==null?'网络错误':'HTTP '+status)+'</span>'
+    +'<span class="ms">⏱ '+ms+' ms</span>'
+    +(cur?'<span class="ms">'+esc(cur.method+' '+cur.path)+'</span>':'');
+  document.getElementById('respBody').innerHTML=hl(text);
+}
+function hl(txt){
+  return esc(txt).replace(
+    /("(?:\\u[a-f0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(?:true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g,
+    m=>m.endsWith(':')?'<span class="jk">'+m+'</span>'
+      :m[0]==='"'?'<span class="js">'+m+'</span>'
+      :'<span class="jn">'+m+'</span>');
+}
+
+/* ---------------- 调用历史 ---------------- */
+function pushHist(h){
+  let hist=[]; try{hist=JSON.parse(localStorage.getItem('hist')||'[]')}catch(_){}
+  hist.unshift(h); hist=hist.slice(0,30);
+  localStorage.setItem('hist',JSON.stringify(hist)); renderHist();
+}
+function renderHist(){
+  let hist=[]; try{hist=JSON.parse(localStorage.getItem('hist')||'[]')}catch(_){}
+  const box=document.getElementById('histList');
+  if(!hist.length){box.innerHTML='<div class="empty">暂无调用</div>';return;}
+  box.innerHTML=hist.map(h=>'<div class="histrow" title="点击回看响应">'
+    +'<span class="m '+h.m+'">'+h.m+'</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(h.u)+'</span>'
+    +'<span class="status s'+String(h.s||'')[0]+'" style="font-size:11px;padding:1px 8px">'+(h.s==null?'ERR':h.s)+'</span>'
+    +'<span class="t">'+h.ms+'ms '+h.t+'</span></div>').join('');
+}
+document.getElementById('histList').addEventListener('click',ev=>{
+  const row=ev.target.closest('.histrow'); if(!row) return;
+  const idx=[...document.getElementById('histList').children].indexOf(row);
+  let hist=[]; try{hist=JSON.parse(localStorage.getItem('hist')||'[]')}catch(_){}
+  const h=hist[idx]; if(!h) return;
+  cur={method:h.m.split(' ')[0],path:h.u.split('?')[0]};
+  showResp(h.s,'（历史记录仅存请求信息，响应需重新发送）',h.ms);
+});
+
+/* ---------------- 总览卡（打开即验活） ---------------- */
+async function jget(u){
+  const headers={}; const key=document.getElementById('apiKey').value.trim();
+  if(key) headers['X-API-Key']=key;
+  const r=await fetch(u,{headers}); return {ok:r.ok,status:r.status,data:await r.json().catch(()=>null)};
+}
+async function overview(){
+  const cH=document.getElementById('cardHealth'),cS=document.getElementById('cardStores'),
+        cJ=document.getElementById('cardJobs'),cR=document.getElementById('cardRecent');
+  try{
+    const h=await jget('/health');
+    cH.innerHTML='<h3><span class="dot '+(h.ok?'g':'r')+'"></span>服务健康</h3>'
+      +(h.ok?'<div class="big" style="color:var(--green)">运行中</div><div class="sub">'+esc(h.data&&h.data.service||'')+' · HTTP '+h.status+'</div>'
+             :'<div class="big" style="color:var(--red)">异常</div><div class="sub">HTTP '+h.status+'</div>');
+  }catch(e){ cH.innerHTML='<h3><span class="dot r"></span>服务健康</h3><div class="big" style="color:var(--red)">不可达</div><div class="sub">'+esc(e.message)+'</div>'; }
+  try{
+    const s=await jget('/stores');
+    const items=(s.data&&s.data.items)||[];
+    cS.innerHTML='<h3>🏪 店铺</h3><div class="big">'+items.length+'</div>'
+      +items.map(x=>'<div class="sub">'+esc(x.domain||x.name||('#'+x.id))+(x.is_available===false?'（停用）':'')+'</div>').join('');
+  }catch(e){ cS.innerHTML='<h3>🏪 店铺</h3><div class="sub">加载失败：'+esc(e.message)+'</div>'; }
+  try{
+    const j=await jget('/tasks/jobs');
+    const jobs=(j.data&&j.data.jobs)||[];
+    cJ.innerHTML='<h3>⏰ 定时任务（▶ 立即运行）</h3>'
+      +jobs.map(x=>'<div class="taskrow"><code>'+esc(x.name)+'</code><span class="cron">'+esc(x.cron||'')+'</span>'
+        +'<span style="flex:1"></span><button class="mini" onclick="runJob(\''+esc(x.name)+'\',this)">▶ 运行</button></div>').join('')
+      +'<div class="runlog" id="runlog"></div>';
+  }catch(e){ cJ.innerHTML='<h3>⏰ 定时任务</h3><div class="sub">加载失败：'+esc(e.message)+'</div>'; }
+  try{
+    const t=await jget('/tasks?limit=5');
+    const items=(t.data&&t.data.items)||[];
+    cR.innerHTML='<h3>📜 最近任务执行</h3>'
+      +(items.length?items.map(x=>'<div class="taskrow">'
+        +'<span class="dot '+(x.success?'g':'r')+'"></span>'
+        +'<code>'+esc((x.task_name||'').split('.').pop())+'</code>'
+        +'<span class="cron">'+esc(x.finished_at||x.started_at||'')+' · '+(x.duration_s??'?')+'s</span></div>').join('')
+        :'<div class="sub">尚无执行记录（可点左侧任务 ▶ 运行）</div>');
+  }catch(e){ cR.innerHTML='<h3>📜 最近任务执行</h3><div class="sub">加载失败：'+esc(e.message)+'</div>'; }
+}
+async function runJob(name,btn){
+  const log=document.getElementById('runlog'); if(log) log.textContent='运行 '+name+' …';
+  btn.disabled=true;
+  try{
+    const headers={'Content-Type':'application/json'}; const key=document.getElementById('apiKey').value.trim();
+    if(key) headers['X-API-Key']=key;
+    const r=await fetch('/tasks/'+encodeURIComponent(name)+'/run',{method:'POST',headers});
+    const d=await r.json().catch(()=>null);
+    if(log) log.textContent='▶ '+name+' → HTTP '+r.status+'\n'+JSON.stringify(d,null,2);
+    overview();   // 刷新最近执行卡
+  }catch(e){ if(log) log.textContent='❌ '+esc(e.message); }
+  btn.disabled=false;
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ---------------- 启动 ---------------- */
+loadAll().then(overview);
+renderHist();
+</script>
+</body>
+</html>
