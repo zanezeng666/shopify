@@ -7,6 +7,7 @@
 - poll_channels  渠道状态轮询 + 跟踪号自动回传 Shopify
 - sync_inventory 渠道库存 -> Shopify（CS/FastRite 本地镜像批量 + diff 预筛 + 单轮限流）
 - daily_report   每店铺昨日销量汇总
+- recalc_prices 定价引擎全量重算（20%/15%/亚马逊封顶）+ 改价 + 停售下架
 
 手动触发：POST /tasks/{job}/run（REST），或 python -m shopify_admin.scheduler 独立跑调度进程。
 """
@@ -222,6 +223,37 @@ def job_sync_products() -> str:
 
 
 # ==================================================================
+# 7. 定价引擎（成本+运费+平台费 → 全量重定价 + 停售下架，2026-11-04 规则）
+# ==================================================================
+@task_record
+def job_recalc_prices() -> str:
+    """每日：全量定价决策（20% 标准 / 15% 底线 / 亚马逊参考价封顶）→ 各店改价 + 停售下架。
+
+    规则定稿见 services/pricing/service.py 模块注释；改价每轮限量（限流收敛，
+    余量次日消化，手动可反复触发）。
+    """
+    from shopify_admin.services.pricing import PricingService
+
+    stats = PricingService().run_all_stores(dry_run=False)
+    d = stats["decisions"]
+    parts = [
+        f"priced={d['priced']}/{d['total']} stopped={d['stopped']} "
+        f"no_cost={d['no_cost']} margin_risk={d['margin_risk']} "
+        f"basis[a20/cap/f15]={d['basis']['formula20']}/{d['basis']['amazon_cap']}/{d['basis']['floor15']}"
+    ]
+    for st in stats["stores"]:
+        if "error" in st:
+            parts.append(f"store{st['store_id']}: ERROR {st['error'][:80]}")
+            continue
+        r, dl = st["recalc"], st["delist"]
+        parts.append(
+            f"store{st['store_id']}: price {r['updated']}/{r['to_update']}↑"
+            f" fail={r['failed']} defer={r.get('deferred', 0)} | delist {dl['delisted']}/{dl['to_delist']}"
+        )
+    return "; ".join(parts)
+
+
+# ==================================================================
 # 注册表（手动触发端点共用）
 # ==================================================================
 JOBS: dict[str, Callable[[], str]] = {
@@ -231,6 +263,7 @@ JOBS: dict[str, Callable[[], str]] = {
     "sync_inventory": job_sync_inventory,
     "daily_report": job_daily_report,
     "sync_products": job_sync_products,
+    "recalc_prices": job_recalc_prices,
 }
 
 JOB_CRONS: dict[str, str] = {
@@ -240,4 +273,5 @@ JOB_CRONS: dict[str, str] = {
     "sync_inventory": settings.scheduler_inventory_sync_cron,
     "daily_report": settings.scheduler_reports_cron,
     "sync_products": settings.scheduler_product_sync_cron,
+    "recalc_prices": settings.scheduler_price_recalc_cron,
 }

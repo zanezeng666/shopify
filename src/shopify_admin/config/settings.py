@@ -53,6 +53,10 @@ class Settings(BaseSettings):
     fastrite_app_key: str = ""
     fastrite_app_secret: str = ""
 
+    # ---- CS 能力 API（BMAI 服务化接口，同机部署可 http://127.0.0.1:<port> 直连）----
+    cs_api_base: str = ""
+    cs_api_key: str = ""
+
     # ---- 运费同步（CS 费率表 → Shopify Carrier Service 实时回调）----
     shipping_markup: float = 1.2            # Shopify 展示运费 = CS 基数 × 该系数（+20%）
     shipping_origin: str = "US"             # 默认发货路线 origin（cs_shipping_carrier.origin，US→USA）
@@ -72,8 +76,20 @@ class Settings(BaseSettings):
     # 产品周同步（CS 产品库 → Shopify：发布新品 + 条码补空/重量对齐）
     scheduler_product_sync_cron: str = "0 3 * * 1"      # 每周一 03:00
     scheduler_product_sync_publish: str = "active"      # 新品发布形态 active|draft
-    scheduler_product_sync_price_mode: str = "report"   # report|overwrite（店铺独立定价，默认不改价）
+    scheduler_product_sync_price_mode: str = "report"   # report|overwrite（定价归 pricing 引擎，此处保持 report）
     scheduler_product_sync_max_ops: int = 300           # 每店每轮创建/更新各上限（限流收敛）
+
+    # ---- 定价引擎（2026-11-04 用户拍板；services/pricing）----
+    pricing_payment_rate: float = 0.029        # 收款费率（售价占比，Shopify Payments）
+    pricing_payment_fixed: float = 0.30        # 收款固定费/单
+    pricing_margin_std: float = 0.20           # 标准目标净利率（扣平台收款费后）
+    pricing_margin_floor: float = 0.15         # 利润底线（有亚马逊参考价封顶时）
+    pricing_amzn_discount: float = 0.97        # 独立站价 = 亚马逊参考价 × 该系数
+    pricing_amzn_outlier_ratio: float = 0.6    # 最低价 < 次低价×该值 → 离群剔除取次低
+    pricing_shipping_zone: int = 9             # 定价运费成本 zone（保守取最贵档）
+    pricing_default_weight_g: int = 113        # 无重量数据产品按首档重量计价
+    pricing_max_updates_per_run: int = 1500    # 每店每轮改价上限（REST 限流收敛）
+    scheduler_price_recalc_cron: str = "30 4 * * *"      # 每日 04:30 重定价+停售下架
 
     # ---- MCP ----
     mcp_server_name: str = "shopify-admin"
