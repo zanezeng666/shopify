@@ -152,7 +152,12 @@ class ShopifyClient:
                 )
             except httpx.HTTPError as e:
                 if attempt < self.max_retries:
-                    time.sleep(min(2.0 ** attempt, 8.0))
+                    wait = min(2.0 ** attempt, 8.0)
+                    logger.warning(
+                        f"[shopify] GraphQL 网络异常 {type(e).__name__}: {e}，{wait:.1f}s 后重试 "
+                        f"({attempt + 1}/{self.max_retries})"
+                    )
+                    time.sleep(wait)
                     attempt += 1
                     continue
                 raise ShopifyAPIError(f"Shopify GraphQL 网络失败: {e}") from e

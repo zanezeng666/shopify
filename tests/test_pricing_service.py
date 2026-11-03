@@ -333,6 +333,118 @@ def test_push_price_updates_graphql_groups_by_product(monkeypatch):
         assert all(v["price"].count(".") == 1 for v in vs)
 
 
+def _push_fixture(monkeypatch, respond):
+    """公共桩：3 个产品 501/502/503（各 1 变体），respond(pid)->data 或 raise。"""
+    import shopify_admin.services.pricing.service as pmod
+
+    class _Q:
+        def __init__(self, rows):
+            self._rows = rows
+
+        def all(self):
+            return self._rows
+
+    class _FakeSess:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def execute(self, stmt):
+            return _Q([(111, 501), (112, 502), (113, 503)])
+
+    calls: list[int] = []
+
+    class _FakeClient:
+        def graphql(self, query, variables):
+            pid = int(variables["pid"].rsplit("/", 1)[-1])
+            calls.append(pid)
+            return respond(pid)
+
+        def close(self):
+            pass
+
+    class _FakeStores:
+        def get_client(self, sid):
+            return _FakeClient()
+
+    monkeypatch.setattr(pmod, "session_scope", lambda: _FakeSess())
+    svc = PricingService(store_service=_FakeStores())
+    todo = [(111, "s", 19.99), (112, "s", 29.99), (113, "s", 39.99)]
+    return svc, todo, calls
+
+
+def test_push_price_updates_graphql_dead_product_skipped(monkeypatch):
+    def respond(pid):
+        if pid == 502:
+            return {"productVariantsBulkUpdate": {
+                "userErrors": [{"field": ["productId"], "message": "Product does not exist"}]}}
+        return {"productVariantsBulkUpdate": {"userErrors": []}}
+
+    svc, todo, calls = _push_fixture(monkeypatch, respond)
+    ok, errs = svc._push_price_updates_graphql(7, todo)
+    assert [v for v, _p in ok] == [111, 113]   # 死产品变体不进 ok
+    assert not errs                              # 死产品不计为错误
+    assert calls == [501, 502, 503]              # 但确实尝试过
+
+
+def test_push_price_updates_graphql_circuit_breaker(monkeypatch):
+    """3 个产品失败（<30）不触发熔断，自然收尾并逐条记录。"""
+    def respond(pid):
+        raise RuntimeError("Shopify GraphQL 网络失败: timed out")
+
+    svc, todo, calls = _push_fixture(monkeypatch, respond)
+    ok, errs = svc._push_price_updates_graphql(7, todo)
+    assert not ok
+    assert len(calls) == 3                       # 未熔断：每个产品都尝试了
+    assert len(errs) == 3 and not any("熔断" in e for e in errs)
+
+
+def test_push_price_updates_graphql_breaks_after_30_consecutive_failures(monkeypatch):
+    """35 个产品全部网络失败 → 第 30 个连续失败后熔断，剩余不再请求。"""
+    import shopify_admin.services.pricing.service as pmod
+
+    class _Q:
+        def __init__(self, rows):
+            self._rows = rows
+
+        def all(self):
+            return self._rows
+
+    class _FakeSess:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def execute(self, stmt):
+            # 40 个产品，各 1 变体
+            return _Q([(1000 + i, 2000 + i) for i in range(40)])
+
+    calls: list[int] = []
+
+    class _FakeClient:
+        def graphql(self, query, variables):
+            calls.append(int(variables["pid"].rsplit("/", 1)[-1]))
+            raise RuntimeError("network down")
+
+        def close(self):
+            pass
+
+    class _FakeStores:
+        def get_client(self, sid):
+            return _FakeClient()
+
+    monkeypatch.setattr(pmod, "session_scope", lambda: _FakeSess())
+    todo = [(1000 + i, "s", 9.99) for i in range(40)]
+    ok, errs = PricingService(store_service=_FakeStores())._push_price_updates_graphql(7, todo)
+    assert not ok
+    assert len(calls) == 30            # 熔断后剩余 10 个不再请求
+    assert any("熔断" in e for e in errs)
+
+
 # ----------------------------------------------------------------------
 # delist_stopped：停售产品 → draft
 # ----------------------------------------------------------------------

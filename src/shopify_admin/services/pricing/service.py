@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import math
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
@@ -431,22 +432,43 @@ class PricingService:
         if not by_prod:
             return ok, errs
         client = self._stores.get_client(store_id)
+        dead = 0            # Shopify 端已不存在的产品（本地库陈旧引用，非错误）
+        consec_fail = 0     # 连续网络级失败（熔断计数，防 30s×重试×上万产品）
+        t0 = time.monotonic()
         try:
-            for pid, items in by_prod.items():
+            for idx, (pid, items) in enumerate(by_prod.items(), 1):
                 vinput = [{"id": f"gid://shopify/ProductVariant/{v}", "price": f"{p:.2f}"}
                           for v, p in items]
                 try:
                     data = client.graphql(self._BULK_PRICE_MUTATION, {
                         "pid": f"gid://shopify/Product/{pid}", "vs": vinput})
+                    consec_fail = 0
                     ue = (data.get("productVariantsBulkUpdate", {}).get("userErrors")) or []
                     if ue:
-                        errs.append(f"product {pid}: {str(ue[:2])[:150]}")
+                        msgs = "; ".join(str(u.get("message")) for u in ue)
+                        if "does not exist" in msgs:
+                            dead += 1
+                        else:
+                            errs.append(f"product {pid}: {msgs[:150]}")
                     else:
                         ok.extend(items)
                 except Exception as e:  # 单产品失败不阻断
                     errs.append(f"product {pid}: {str(e)[:150]}")
+                    consec_fail += 1
+                    if consec_fail >= 30:
+                        errs.append(f"连续 {consec_fail} 个产品网络失败，熔断中止本轮"
+                                    f"（已推 {len(ok)} 变体 / {idx - consec_fail} 产品）")
+                        break
+                if idx % 200 == 0:
+                    rate = idx / (time.monotonic() - t0)
+                    logger.info(
+                        f"[pricing] 改价推送 {idx}/{len(by_prod)} 产品 ({rate:.1f}/s) "
+                        f"变体ok={len(ok)} err={len(errs)} 死产品={dead}"
+                    )
         finally:
             client.close()
+        if dead:
+            logger.warning(f"[pricing] {dead} 个产品 Shopify 端不存在（本地库陈旧引用），本轮跳过其改价")
         return ok, errs
 
     @staticmethod
