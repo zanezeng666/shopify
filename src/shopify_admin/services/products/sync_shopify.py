@@ -20,7 +20,7 @@
 - 停产/孤儿 默认只报告不下架（破坏性动作留人工）
 - 营销字段  CREATE 时生成且对齐店铺既有上架格式（实证 22k 老品同构）：
               title  = "Battery for {brand} {fit_model...} {part_no...}"
-              handle = battery-for-{slug}；vendor = Bomibattery（店铺统一自有品牌）
+              handle = battery-for-{slug}；vendor = Estry（店铺统一自有品牌）
               body   = 存量复刻模板（Compatible Brand/Model/Part Number 列表）
               SKU    = CS-{csid}_{Brand}_{类目码}_0（存量 23975/23976 为 4 段格式；
                        履约 SkuResolver 正则 ^CS-[A-Z0-9]+ 前缀锚定，段数不敏感）
@@ -46,7 +46,8 @@ from shopify_admin.services.stores.service import StoreService
 
 _CS_ID_RE = re.compile(r"^(CS-[A-Za-z0-9]+)")
 _SUSPICIOUS_PCT = 0.5      # 价格跳变阈值：|店铺价-CS零售|/CS零售 > 50% 列入人工复核清单
-_STORE_VENDOR = "Bomibattery"   # 店铺统一自有品牌（存量 22k 产品实证，含全部 CS 老品）
+_STORE_VENDOR = "Estry"   # 店铺自有品牌（2026-11-03 由 Bomibattery 切换为美国品牌
+                          #  Estry，域名 estrybattery.com；同步改线上 15k+ 存量 vendor）
 
 # ---- 产品图片外链（cameronsino.co 图库站，2026-10-31 实证） ----
 # 规律: https://cameronsino.co/images/CS-{ID}-{N}.jpg，N 从 1 连续递增至首个 404 停；
@@ -134,6 +135,35 @@ _CS_COLS = (
 # 白名单里 Cable Modem 含 cable 不受影响）
 _NON_BATTERY_KW = ("charger", "adapter", "cable", "coupler", "case",
                    "mirror", "microphone")
+
+# 品类收缩黑名单（2026-11-12 用户拍板）：手机/相机/笔记本三类不再建新品，
+# 存量品已批量转 DRAFT（deploy/rebalance_exec.py）；CS category 文本口径。
+_EXCLUDED_CATEGORIES = {"Mobile, SmartPhone", "Notebook, Laptop", "Camera"}
+
+# ==================================================================
+# 详情页 body v2（2026-11-03）：分区化模板，全部内联样式（Shopify 描述区
+# 过滤 script/iframe/外部 CSS，内联 style 安全）；移动端优先（% 宽度）。
+# 政策承诺为占位文案——政策确定后改此处，refresh_body.py 全局重刷即可。
+# ==================================================================
+_POLICY = {
+    "warranty": "12-Month Warranty",
+    "returns": "30-Day Easy Returns",
+    "shipping": "Ships from US in 48h",
+    # 认证口径（2026-11-03 与用户核实）：CE/RoHS 未做过，撤下虚假宣称
+    # （FTC 风险）；UN38.3 为锂电池运输强制测试（出口必过）、ISO9001 工厂
+    # 质量体系认证已取得——只保留真实的
+    "certs": "UN38.3 & ISO9001 Certified",
+}
+_H3_STYLE = ("margin:14px 0 8px;font-size:18px;font-weight:700;color:#1B2A41;"
+             "border-bottom:2px solid #1B2A41;padding-bottom:4px;")
+
+
+def _esc(x: Any) -> str:
+    return str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _h3(title: str) -> str:
+    return f'<h3 style="{_H3_STYLE}">{title}</h3>'
 
 
 def _is_battery_record(cs_row: dict) -> bool:
@@ -301,6 +331,8 @@ class CsShopifySyncService:
         for key, cs_row in on_sale.items():
             group = matched.get(key)
             if group is None:
+                if (cs_row.get("category") or "").strip() in _EXCLUDED_CATEGORIES:
+                    continue  # 品类收缩黑名单：三类不建新品（存量已 DRAFT）
                 payload = self.build_new_product_payload(cs_row)
                 # 批内 handle 去重（不同记录生成相同 slug 时加序号后缀）
                 h = payload["handle"]
@@ -462,6 +494,16 @@ class CsShopifySyncService:
             "tags": "",
             "body_html": self._build_body_html(cs_row),
             "variants": [variant],
+            # v2.2（DeepSeek 审查 2026-11-05）：显式命名选项，Shopify 默认名
+            # "Title" 会裸露在变体选择器上；Capacity 与 option1 容量口径一致
+            "options": [{"name": "Capacity"}],
+            # v2.2：独立 SEO 描述（定义句 155 字符），阻断 Dawn 默认取 body
+            # 开头导致的徽章文字污染 meta description
+            "metafields": [{
+                "namespace": "seo", "key": "description",
+                "value": self._entity_text(cs_row)[:155],
+                "type": "single_line_text_field",
+            }],
         }
 
     @staticmethod
@@ -471,46 +513,174 @@ class CsShopifySyncService:
 
     @staticmethod
     def _build_body_html(cs_row: dict) -> str:
-        """复刻店铺存量 body 模板（实证 22k 老品同构，如 7122951831719）：
-        Battery Specifications 双表格 + Compatible 列表 + 认证/Tips 尾段。"""
-        def esc(x: Any) -> str:
-            return str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        """详情页 body v2 分区模板（2026-11-03）：
 
-        def lis(items: list[str]) -> str:
-            if not items:
-                items = [cs_row["cs_id"]]
-            return "".join(f"<li><b>{esc(i)}</b></li>\n" for i in items)
+        信任徽章条 → 规格表 → 兼容列表（空值省略规则保留）→ 安全警示
+        → 品牌卖点 → FAQ 折叠收尾（购买提示已并入 FAQ 首条，2026-11-03）。
+        全部内联样式，Shopify 描述区安全。"""
+        S = CsShopifySyncService
+        return "\n".join(s for s in (
+            S._sec_highlights(),
+            S._entity_sentence(cs_row),
+            S._spec_tables_html(cs_row),
+            S._sec_compatible(cs_row),
+            S._sec_safety(),
+            S._sec_selling(),
+            S._sec_faq(),
+        ) if s)
 
-        spec = CsShopifySyncService._spec_tables_html(cs_row)
+    @staticmethod
+    def _entity_sentence(cs_row: dict) -> str:
+        """自包含定义句（AI 搜索适配 2026-11-03）：一句话含全部关键实体
+        （容量/电压/类型/品牌/型号/件号），是 AI 摘要的最小可引用单元；
+        缺失片段自动省略，型号取前 2、件号取前 3，余量以 "and more" 收口。"""
+        def uniq(seq) -> list[str]:
+            seen: set[str] = set()
+            return [x for x in seq if not (x in seen or seen.add(x))]
 
-        fits = [f.strip() for f in re.split(r"[,;/]", cs_row["fit_model"]) if f.strip()]
-        pnos = [p.strip() for p in re.split(r"[,;/]", cs_row["part_no"]) if p.strip()]
+        specs = " ".join((cs_row.get(k) or "").strip()
+                         for k in ("capacity", "voltage", "battery_type")
+                         if (cs_row.get(k) or "").strip())
+        head = ("This is a " + specs + " replacement battery").replace("  ", " ")
+
         brand = cs_row["brand"] or cs_row["cs_id"]
+        fits = uniq(f.strip() for f in re.split(r"[,;/]", cs_row["fit_model"] or "") if f.strip())
+        pnos = uniq(p.strip() for p in re.split(r"[,;/]", cs_row["part_no"] or "") if p.strip())
+
+        seg = (f"for {_esc(brand)} {_esc(', '.join(fits[:2]))}"
+               + (" and more" if len(fits) > 2 else "")) if fits \
+            else f"for {_esc(brand)} devices"
+        if pnos:
+            seg += (", compatible with battery part numbers "
+                    + _esc(", ".join(pnos[:3]))
+                    + (" and more" if len(pnos) > 3 else ""))
+        return ('<p style="margin:10px 0 0;font-size:14px;color:#1B2A41;'
+                'line-height:1.6;">' + head + " " + seg + ".</p>\n")
+
+    @staticmethod
+    def _entity_text(cs_row: dict) -> str:
+        """定义句纯文本：供 seo.description（155 字符截断）复用，阻断
+        Dawn 默认取 body 开头导致的徽章污染 meta（2026-11-05）。"""
+        html = CsShopifySyncService._entity_sentence(cs_row)
+        return re.sub(r"<[^>]+>", "", html).strip()
+
+    @staticmethod
+    def _sec_highlights() -> str:
+        """页首信任徽章条：保修/退换/发货/认证（政策占位见 _POLICY）。"""
+        def badge(txt: str) -> str:
+            return (f'<span style="display:inline-block;background:#F4F6F8;'
+                    f'border:1px solid #D9E2EC;border-radius:6px;padding:5px 12px;'
+                    f'margin:0 6px 6px 0;font-size:13px;font-weight:600;'
+                    f'color:#1B2A41;">{txt}</span>')
+        return ('<div style="margin:0 0 14px;line-height:1.6;">'
+                + badge(_esc(_POLICY["warranty"]))
+                + badge(_esc(_POLICY["returns"]))
+                + badge(_esc(_POLICY["shipping"]))
+                + badge(_esc(_POLICY["certs"]))
+                + "</div>\n")
+
+    @staticmethod
+    def _sec_compatible(cs_row: dict) -> str:
+        """兼容区（v2.2 收敛）：单 h3 Compatibility + 行内标签组，
+        Brand 单值行内、Model/Part Number 多值列表（内容口径与 2026-11-03
+        用户确认版一致）；型号/件号空时对应组省略；超 10 项 column-width
+        自适应列；多值去重保序（源数据偶见重复型号）。"""
+        def uniq(seq) -> list[str]:
+            seen: set[str] = set()
+            return [x for x in seq if not (x in seen or seen.add(x))]
+
+        def label(txt: str) -> str:
+            return f'<div style="margin:6px 0 0;"><b>{txt}:</b></div>'
+
+        def ul(items: list[str]) -> str:
+            extra = "column-width:170px;column-gap:28px;" if len(items) > 10 else ""
+            lis = "".join(f"<li><b>{_esc(i)}</b></li>\n" for i in items)
+            return (f'<ul style="margin:4px 0 0;padding-left:22px;{extra}">\n'
+                    f"{lis}</ul>\n")
+
+        fits = uniq(f.strip() for f in re.split(r"[,;/]", cs_row["fit_model"]) if f.strip())
+        pnos = uniq(p.strip() for p in re.split(r"[,;/]", cs_row["part_no"]) if p.strip())
+        brand = cs_row["brand"] or cs_row["cs_id"]
+        out = [_h3("Compatibility"),
+               '<div style="margin:6px 0 0;"><b>Compatible Brand:</b> '
+               + _esc(brand) + "</div>"]
+        if fits:
+            out.append(label("Compatible Model") + ul(fits))
+        if pnos:
+            out.append(label("Compatible Battery Part Number") + ul(pnos))
+        return '<div style="margin:0 0 6px;">' + "".join(out) + "</div>\n"
+
+    @staticmethod
+    def _sec_safety() -> str:
+        """电池安全警示（品类刚需）：浅黄警示框 + 左侧粗边框。"""
+        items = (
+            "Do not disassemble, puncture or modify the battery.",
+            "Never short-circuit the terminals or expose to heat / fire.",
+            "Do not mix with different batteries or chargers.",
+            "Recycle used batteries at designated collection points.",
+        )
+        lis = "".join(f'<li style="margin:2px 0;">{t}</li>' for t in items)
         return (
-            spec
-            + "<br><br>- Compatible Brand: <br>\n"
-            + f"<ul><li><b>{esc(brand)}</b></li></ul>\n"
-            + " <br>- Compatible Model: <br>\n\t<ul>\n"
-            + f"\t{lis(fits)}\t</ul>\n"
-            + "<br>- Compatible Battery Part Number: <br>\n\t<ul>\n"
-            + f"\t{lis(pnos)}\t</ul>\n"
-            + "<br>- RoHS approved for toxic free.<br>\n"
-            + "<br>- CE and ISO9001 Certificate for quality assurance.<br>\n"
-            + "<br><b>Tips Before Purchase</b><br>\n"
-            + "Please confirm the compatible model and battery part number carefully "
-            "before you purchase it. <br>\n"
-            + "If you are not sure, please send email to us with your battery details "
-            "or pictures, we will give you professional suggestions.\n"
+            _h3("&#9888; Safety Warnings")
+            + '<div style="background:#FFF8E1;border-left:4px solid #B7791F;'
+              'border-radius:4px;padding:10px 14px;margin:0 0 6px;color:#52606D;'
+              'font-size:14px;line-height:1.6;">'
+            + f'<ul style="margin:0;padding-left:20px;">{lis}</ul></div>\n'
         )
 
     @staticmethod
-    def _spec_tables_html(cs_row: dict) -> str:
-        """Battery Specifications 双表格（左 Type/Weight/Dimension，右
-        Category/Voltage/Rate），逐字复刻存量页首模板；空字段跳行，
-        两表全空则整段省略（退化为纯列表形态）。"""
-        def esc(x: Any) -> str:
-            return str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    def _sec_selling() -> str:
+        """品牌卖点 + 合规声明（UN38.3/MSDS/ISO9001 真实口径；CE/RoHS 未做过不宣称）。"""
+        points = (
+            ("Grade A Cells", "Premium cells with stable discharge and low self-discharge."),
+            ("Real Capacity", "Capacity tested to match or exceed the original battery."),
+            ("Strict QC", "Every battery passes charging/discharging and safety checks."),
+        )
+        rows = "".join(
+            f'<div style="margin:6px 0;"><b style="color:#1B2A41;">&#10003; {t}</b>'
+            f' <span style="color:#52606D;font-size:14px;">— {d}</span></div>'
+            for t, d in points)
+        return (
+            _h3("Why Choose Estry")
+            + '<div style="background:#F4F6F8;border-radius:8px;padding:10px 14px;'
+              'margin:0 0 6px;">' + rows + "</div>\n"
+            + '<div style="color:#52606D;font-size:14px;margin:8px 0 0;">'
+              "UN38.3 tested for safe transport. MSDS available upon request. "
+              "Manufactured in an ISO9001 certified facility.</div>\n"
+        )
 
+    @staticmethod
+    def _sec_faq() -> str:
+        """FAQ 折叠（details/summary）：不支持折叠的主题自然展开，降级安全。"""
+        faqs = (
+            ("How do I confirm this battery fits my device?",
+             "Match your device against the <b>Compatible Model</b> list above, or "
+             "compare the part number printed on your original battery. Still unsure? "
+             "Email us with your battery details or photos and we will help you confirm."),
+            ("What is the warranty policy?",
+             f"This battery is covered by a {_POLICY['warranty'].lower()} against "
+             f"manufacturing defects, plus {_POLICY['returns'].lower()} for peace of mind."),
+            ("How fast will my order arrive?",
+             "In-stock orders ship from our US warehouse within 48 hours on business days."),
+        )
+        out = [_h3("FAQ")]
+        for q, a in faqs:
+            out.append(
+                '<details style="margin:6px 0;border:1px solid #D9E2EC;'
+                'border-radius:6px;padding:8px 12px;">'
+                + f'<summary style="font-weight:600;color:#1B2A41;'
+                  f'cursor:pointer;">{_esc(q)}</summary>'
+                + f'<p style="margin:8px 0 2px;color:#52606D;font-size:14px;'
+                  f'line-height:1.6;">{a}</p></details>')
+        return "".join(out) + "\n"
+
+    @staticmethod
+    def _spec_tables_html(cs_row: dict) -> str:
+        """Battery Specifications 规格表（v2：单表格、边框+灰底标签列、
+        100% 宽度移动端自适应）；空字段跳行，全空则整段省略。
+
+        数据加工口径不变：Weight 一位小数；Dimension 去尾零 * 连接；
+        Rate 优先源 wh，缺失按 capacity×voltage 推导（老品实证口径）。"""
         # Weight: 270 → "270.0g"（存量口径一位小数）
         w = int(cs_row.get("gross_weight_g") or cs_row.get("net_weight_g") or 0)
         weight = f"{float(w):.1f}g" if w > 0 else ""
@@ -529,40 +699,26 @@ class CsShopifySyncService:
             if m_cap and m_volt:
                 rate = f"{float(m_cap.group(1)) / 1000 * float(m_volt.group(1)):.2f}Wh"
 
-        left = [("Type:", (cs_row.get("battery_type") or "").strip()),
-                ("Weight:", weight), ("Dimension:", dim)]
-        right = [("Category:", (cs_row.get("category") or "").strip()),
-                 ("Voltage:", (cs_row.get("voltage") or "").strip()), ("Rate:", rate)]
-        left = [(a, b) for a, b in left if b]
-        right = [(a, b) for a, b in right if b]
-        if not left and not right:
+        rows = ([("Type:", (cs_row.get("battery_type") or "").strip()),
+                 ("Weight:", weight), ("Dimension:", dim)]
+                + [("Category:", (cs_row.get("category") or "").strip()),
+                   ("Voltage:", (cs_row.get("voltage") or "").strip()),
+                   ("Rate:", rate)])
+        rows = [(a, b) for a, b in rows if b]
+        if not rows:
             return ""
 
-        def table(rows: list, left_side: bool) -> str:
-            trs = []
-            for i, (label, val) in enumerate(rows):
-                lab = (f'<td width="40%"><b>{label}</b></td>' if i == 0
-                       else f'<td class="detail-tit"><b>{label}</b></td>')
-                if i == 0 and left_side:
-                    cell = f'<td style="text-align: left;" class="detail-tit">{esc(val)}</td>'
-                else:
-                    cell = (f'<td class="detail-tit">{esc(val)}</td>' if i == 0
-                            else f'<td class="detail-val">{esc(val)}</td>')
-                trs.append(f"<tr>\n{lab}\n{cell}\n</tr>\n")
-            if left_side:
-                head = ('<table style="float: left;" border="0" cellspacing="5" '
-                        'cellpadding="5" width="100%">')
-            else:
-                head = ('<table border="0" cellspacing="0" cellpadding="5" '
-                        'style="float: left;" width="100%">')
-            return f"{head}\n<tbody>\n{''.join(trs)}</tbody>\n</table>\n"
-
+        trs = "".join(
+            '<tr><td style="width:40%;background:#F4F6F8;border:1px solid #D9E2EC;'
+            "padding:6px 10px;font-weight:700;color:#1B2A41;\">" + _esc(label)
+            + '</td><td style="border:1px solid #D9E2EC;padding:6px 10px;'
+              'color:#1B2A41;\">' + _esc(val) + "</td></tr>\n"
+            for label, val in rows)
         return (
-            "Battery Specifications <br> <br>\n"
-            '<div style="display: flex;" width="100%">\n'
-            + table(left, True)
-            + table(right, False)
-            + "</div>\n"
+            _h3("Battery Specifications")
+            + '<table width="100%" cellspacing="0" cellpadding="0" '
+              'style="border-collapse:collapse;margin:0 0 4px;font-size:14px;">'
+            + f"<tbody>\n{trs}</tbody></table>\n"
         )
 
     # ==================================================================
@@ -622,7 +778,12 @@ class CsShopifySyncService:
                     # cdn.shopify.com，与老品同源）；无图品照常建（约 2% 图库缺失）
                     urls = self._probe_images(item["cs_id"], img_http)
                     if urls:
-                        payload["images"] = [{"src": u} for u in urls]
+                        # alt=产品标题（2026-11-05 DeepSeek 审查：裸 alt 对 SEO/
+                        # 无障碍双输；标题已含品牌型号关键词，第 N 张加序号）
+                        _alt = payload["title"]
+                        payload["images"] = [
+                            {"src": u, "alt": _alt if n == 0 else f"{_alt} - {n + 1}"}
+                            for n, u in enumerate(urls)]
                         summary["images_attached"] += 1
                     else:
                         summary["images_missing"] += 1

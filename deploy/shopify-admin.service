@@ -1,0 +1,15 @@
+[Unit]
+Description=shopify-admin API (uvicorn 127.0.0.1:8100)
+After=network.target
+
+[Service]
+Type=simple
+User=jason
+WorkingDirectory=/home/jason/shopify-admin
+ExecStart=/home/jason/shopify-admin/.venv/bin/uvicorn shopify_admin.api.app:app --host 127.0.0.1 --port 8100
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

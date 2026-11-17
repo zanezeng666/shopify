@@ -1,0 +1,57 @@
+{% comment %} estry-category-grid-v1 {% endcomment %}
+<section class="ecg">
+  <div class="ecg__inner page-width">
+    <div class="ecg__head">
+      <h2 class="ecg__title">{{ section.settings.heading | escape }}</h2>
+      <p class="ecg__sub">{{ section.settings.subheading | escape }}</p>
+    </div>
+    <div class="ecg__grid">
+      {%- for block in section.blocks -%}
+        {%- assign col = block.settings.collection -%}
+        {%- if col != blank and col.products_count > 0 -%}
+          <a class="ecg__card" href="{{ col.url }}" {{ block.shopify_attributes }}>
+            <span class="ecg__badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
+            </span>
+            <span class="ecg__name">{{ block.settings.label | default: col.title | escape }}</span>
+            <span class="ecg__count">{{ col.products_count }} products</span>
+            <span class="ecg__go">Shop now <span aria-hidden="true">&rarr;</span></span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<style>
+  /* Dawn 全局 1rem=10px（html 62.5%）：区块标题对齐原生 .h2（24px desktop/20px mobile，Oswald） */
+  .ecg{padding:52px 0 56px;}
+  .ecg__inner{padding:0 1.5rem;}
+  .ecg__head{text-align:center;margin-bottom:28px;}
+  .ecg__title{margin:0 0 6px;font-size:clamp(2rem,2.4vw,2.4rem);color:#1B2A41;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .ecg__sub{margin:0;color:#5a6b7d;font-size:1.4rem;}
+  .ecg__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .ecg__card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px 20px;text-decoration:none;transition:transform .15s,border-color .15s,box-shadow .15s;}
+  .ecg__card:hover{transform:translateY(-3px);border-color:#00A651;box-shadow:0 8px 22px rgba(27,42,65,.10);}
+  .ecg__badge{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1B2A41,#243a57);color:#9fd8b8;display:flex;align-items:center;justify-content:center;margin-bottom:6px;}
+  .ecg__badge svg{width:22px;height:22px;}
+  .ecg__name{font-size:1.5rem;font-weight:700;color:#1B2A41;}
+  .ecg__count{font-size:1.3rem;color:#5a6b7d;}
+  .ecg__go{margin-top:auto;padding-top:8px;font-size:1.3rem;font-weight:600;color:#00A651;}
+  @media (max-width:899px){.ecg__grid{grid-template-columns:repeat(2,1fr);gap:12px;}.ecg{padding:36px 0 40px;}}
+</style>
+{% schema %}
+{
+  "name": "ESTRY Category Grid",
+  "settings": [
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Shop by Device Type"},
+    {"type": "text", "id": "subheading", "label": "Subheading", "default": "Exact-fit replacement batteries for every kind of device"}
+  ],
+  "blocks": [
+    {"type": "category", "name": "Category", "settings": [
+      {"type": "collection", "id": "collection", "label": "Collection"},
+      {"type": "text", "id": "label", "label": "Custom label (optional)"}
+    ]}
+  ],
+  "presets": [{"name": "ESTRY Category Grid"}]
+}
+{% endschema %}

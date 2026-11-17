@@ -273,10 +273,17 @@ class PricingService:
                 if (ref := self.pick_amazon_ref(v, cfg.outlier_ratio)) is not None}
 
     def load_stopped(self) -> set[str]:
-        """停售 cs_id：status=0 ∪ record 最新一条为 Stop 类。"""
+        """停售 cs_id：全部记录均非在售 ∪ record 最新一条为 Stop 类。
+
+        s1 语义修正（2026-11-12）：cs_product 是记录级（cs_id×brand 多行），
+        旧写法「任一记录 status=0 即停售」会把部分品牌停售、部分在售的
+        csid 整体误判停售 → delist_stopped 每晚把在架品打成 draft
+        （实证：B2 误杀 3 例）。正确语义=无任何 status=1 记录才停售。
+        """
         with get_cs_engine().connect() as c:
             s1 = {r[0] for r in c.execute(text(
-                "SELECT DISTINCT cs_id FROM cs_product WHERE status = 0")).all()}
+                "SELECT cs_id FROM cs_product GROUP BY cs_id "
+                "HAVING SUM(status = 1) = 0")).all()}
             s2 = {r[0] for r in c.execute(text(
                 "SELECT r.cs_id FROM cs_product_record r "
                 "JOIN (SELECT cs_id, MAX(id) mid FROM cs_product_record "

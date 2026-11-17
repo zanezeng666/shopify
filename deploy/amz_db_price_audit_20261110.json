@@ -1,0 +1,39 @@
+{
+  "version": "v3-db",
+  "date": "2026-11-10",
+  "method": "amazon库直查(不爬前台)：amazon_inventory多期快照每(cs_id,store,asin,sku)取最新add_date价 + all_listings_report 2026-11-06快照(标题判Pack)；美国站ATVPDKIKX0DER；单价=挂价/Pack数量；主流价=IQR去离群后中位数(用户口径:取大部分趋近价,剔太低太高)",
+  "scope": "体系内59家亚马逊店铺(=我们自己亚马逊平台所有客户)对同cs_id的挂价",
+  "pack_handling": "标题正则 N-pack/Npcs/Npc/pack of N/xN；xN规则对CS-SFM3SL(iAudio X5)禁用防型号词误判；实例:FNT250TW $67.98/x2=$33.99；MVS500VX x3装折算$10.8-11.6被IQR剔除(引流离群)",
+  "results": [
+    {"cs_id": "CS-HIQ200SL", "item": "HP iPAQ 210", "our": 30.99, "n": 12, "main": 32.86, "core": [23.5, 35.51], "adv_pct": 6, "fresh": "11-06"},
+    {"cs_id": "CS-TOX500TW", "item": "Tait Orca 5000/兼容对讲机", "our": 35.99, "n": 19, "main": 46.38, "core": [40.21, 46.67], "adv_pct": 22, "fresh": "11-06"},
+    {"cs_id": "CS-DEL552NB", "item": "Dell Precision 3560", "our": 44.99, "n": 3, "main": 66.40, "core": [66.4, 66.4], "adv_pct": 32, "fresh": "inv-2024旧价"},
+    {"cs_id": "CS-SMR365SH", "item": "三星 Gear Fit2 Pro", "our": 19.99, "n": 3, "main": 21.24, "core": [12.3, 21.8], "adv_pct": 6, "fresh": "11-06"},
+    {"cs_id": "CS-ABL100VX", "item": "割草机器人25.2V 6900mAh(Ambrogio/Stiga/WolfGarten R系列/Wiper)", "our": 139.99, "n": 42, "main": 171.12, "core": [163.85, 198.89], "adv_pct": 18, "fresh": "11-06"},
+    {"cs_id": "CS-MVS500VX", "item": "扫地机14.8V(Puppy R30/SN500/FC9601等)", "our": 27.99, "n": 23, "main": 32.48, "core": [26.99, 34.69], "adv_pct": 14, "fresh": "11-06"},
+    {"cs_id": "CS-CHM170PR", "item": "NTN LT2001寻呼机", "our": 20.99, "n": 15, "main": 22.19, "core": [21.73, 23.97], "adv_pct": 5, "fresh": "11-06"},
+    {"cs_id": "CS-FNT250TW", "item": "八重洲FT-25R/SBR-25L", "our": 31.99, "n": 14, "main": 33.75, "core": [28.99, 42.52], "adv_pct": 5, "fresh": "11-06"},
+    {"cs_id": "CS-TMG610SL", "item": "TomTom Go610/4FA60", "our": 19.99, "n": 8, "main": 20.13, "core": [13.99, 22.43], "adv_pct": 1, "fresh": "11-06"},
+    {"cs_id": "CS-ABM600SL", "item": "Lenovo ServeRAID/Adaptec", "our": 30.99, "n": 7, "main": 31.93, "core": [31.77, 32.07], "adv_pct": 3, "fresh": "11-06"},
+    {"cs_id": "CS-SFM3SL", "item": "i-Audio X5/Cowon M3", "our": 19.99, "n": 11, "main": 21.04, "core": [19.5, 23.2], "adv_pct": 5, "fresh": "11-06"},
+    {"cs_id": "CS-DEW528PX", "item": "DeWalt DC528手电", "our": 62.99, "n": 2, "main": 88.65, "core": [78.99, 98.31], "adv_pct": 29, "fresh": "11-06"},
+    {"cs_id": "CS-EMC150LS", "item": "Saft 0120894应急灯Ni-MH", "our": 27.99, "n": 29, "main": 30.26, "core": [30.05, 30.89], "adv_pct": 8, "fresh": "11-06"},
+    {"cs_id": "CS-KOH300MD", "item": "IKO3心电图(近似)", "our": 27.99, "n": 2, "main": 28.00, "core": [27.0, 29.0], "adv_pct": 0, "fresh": "inv-2021旧价"},
+    {"cs_id": "CS-FVA034MD", "item": "Fresenius输液泵(近似)", "our": 28.99, "n": 10, "main": 31.16, "core": [29.4, 33.0], "adv_pct": 7, "fresh": "inv-2021-22旧价"},
+    {"cs_id": "CS-ECR131VX", "item": "Ilife A4S/扫地机14.8V", "our": 27.99, "n": 26, "main": 32.55, "core": [32.34, 32.94], "adv_pct": 14, "fresh": "11-06"},
+    {"cs_id": "CS-P303CL", "item": "电话电池600mAh(RadioShack 431021系)", "our": 18.99, "n": 91, "main": 21.13, "core": [20.95, 23.2], "adv_pct": 10, "fresh": "11-06"},
+    {"cs_id": "CS-RMA150MD", "item": "ResMed Astral150呼吸机", "our": 82.99, "n": 1, "main": 97.25, "core": [97.25, 97.25], "adv_pct": 15, "fresh": "11-06"},
+    {"cs_id": "CS-WGF300VX", "item": "Karcher WV擦窗机(体系内仅1店;cs_product无档案)", "our": 21.99, "n": 1, "main": 13.88, "core": [13.88, 13.88], "adv_pct": -58, "fresh": "11-06"},
+    {"cs_id": "CS-BS3300PX", "item": "Ramset SBD12/Berner BACS 12V", "our": 62.99, "n": 23, "main": 76.20, "core": [74.53, 77.69], "adv_pct": 17, "fresh": "11-06"}
+  ],
+  "summary": {
+    "cheaper_gt10pct": ["CS-TOX500TW+22", "CS-DEL552NB+32旧价", "CS-ABL100VX+18", "CS-MVS500VX+14", "CS-DEW528PX+29", "CS-ECR131VX+14", "CS-P303CL+10", "CS-RMA150MD+15", "CS-BS3300PX+17"],
+    "parity_within10pct": ["CS-HIQ200SL+6", "CS-SMR365SH+6", "CS-CHM170PR+5", "CS-FNT250TW+5", "CS-TMG610SL+1", "CS-ABM600SL+3", "CS-SFM3SL+5", "CS-EMC150LS+8", "CS-KOH300MD+0旧价", "CS-FVA034MD+7旧价"],
+    "we_are_pricier": ["CS-WGF300VX -58(贵58%,需复核定价或店铺映射)"],
+    "median_adv_pct": 8, "mean_adv_pct": 11.6,
+    "band_structure": "体系内价格高度梯度化：同一价格带常由同一家店铺全线统一定价(Enyuly≈30.0x/BMSX≈32.9x/xsplendor≈23.2/BornMio/IgnaraCells)；ALittleHope_Lab与hongQx常低于主流15-25%(近似清货位)；多Pack折算后与单件价同梯度,不破坏价格体系",
+    "conclusion": "19/20样本Shopify价≤体系内亚马逊主流价,中位便宜8%(均值11.6%),温和低价非碾压;广告侧可用'低于亚马逊自营体系价'作有限宣传,但不宜承诺大幅低价;CS-WGF300VX需复核"
+  },
+  "scripts": ["deploy/amz_db_probe.py", "deploy/amz_db_probe2.py", "deploy/amz_db_probe3.py", "deploy/amz_db_probe4.py", "deploy/amz_pack_analysis.py"],
+  "data_files": ["deploy/amz_probe2.json(3869行inventory)", "deploy/amz_probe3.json(365行listings)", "deploy/amz_pack_out.txt(全明细)"]
+}

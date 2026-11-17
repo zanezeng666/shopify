@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Shopify 店铺管理系统 — REST API + MCP 双入口，全功能接口化"
 requires-python = ">=3.11"
 dependencies = [
-    "bmai",
     "fastapi>=0.115",
     "uvicorn>=0.30",
     "sqlalchemy>=2.0",
@@ -24,6 +23,11 @@ dev = [
     "pytest>=8.0",
     "pytest-httpx>=0.30",
 ]
+# Google Ads API 客户端（services/marketing/google_ads.py 懒加载）：
+# 服务器部署需要广告功能时 uv sync --group ads 安装。
+ads = [
+    "google-ads>=25",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -32,9 +36,10 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/shopify_admin"]
 
-# bmai 以本地 editable 依赖复用（CS 供应商客户端/同步/履约路由）
-[tool.uv.sources]
-bmai = { path = "E:/worksapce/BMAI", editable = true }
+# bmai（CS 渠道/产品同步消费，可选）：全工程零顶层 import、渠道内懒加载。
+# 服务器部署（运费回调等）不需要 bmai；本地需要 CS 渠道功能时手动安装：
+#   uv pip install -e E:/worksapce/BMAI
+# 不可将 bmai 写回主依赖或 uv path 源——服务器无法解析 Windows 本地路径。
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -2,6 +2,9 @@
 .env
 *.env.local
 
+# Google OAuth 密钥（严禁入库）
+deploy/google_ads/
+
 # Python
 __pycache__/
 *.pyc
@@ -17,3 +20,11 @@ Logs/
 .idea/
 .vscode/
 .codebuddy/
+
+# Playwright 运行时快照
+.playwright-cli/
+
+# 本地临时分析产物
+_catmap.txt
+_recdiff.txt
+work_dirs_tmp_*.py

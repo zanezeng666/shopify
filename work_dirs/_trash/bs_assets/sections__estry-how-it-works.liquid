@@ -1,0 +1,48 @@
+{% comment %} estry-how-it-works-v1 {% endcomment %}
+<section class="ehw">
+  <div class="ehw__inner page-width">
+    <div class="ehw__head">
+      <h2 class="ehw__title">{{ section.settings.heading | escape }}</h2>
+      <p class="ehw__sub">{{ section.settings.subheading | escape }}</p>
+    </div>
+    <div class="ehw__grid">
+      {%- for block in section.blocks -%}
+        <div class="ehw__step" {{ block.shopify_attributes }}>
+          <span class="ehw__num">{{ forloop.index }}</span>
+          <h3 class="ehw__st">{{ block.settings.title | escape }}</h3>
+          <p class="ehw__sd">{{ block.settings.text | escape }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<style>
+  /* Dawn 全局 1rem=10px（html 62.5%），字号按 px÷10 写 rem */
+  .ehw{background:#f6f8fa;padding:52px 0 58px;}
+  .ehw__inner{padding:0 1.5rem;}
+  .ehw__head{text-align:center;margin-bottom:30px;}
+  .ehw__title{margin:0 0 6px;font-size:clamp(2rem,2.4vw,2.4rem);color:#1B2A41;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .ehw__sub{margin:0;color:#5a6b7d;font-size:1.4rem;}
+  .ehw__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto;}
+  .ehw__step{background:#fff;border-radius:14px;padding:26px 24px;border:1px solid #e2e8f0;text-align:center;}
+  .ehw__num{width:40px;height:40px;border-radius:50%;background:#00A651;color:#fff;font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+  .ehw__st{margin:0 0 8px;font-size:1.6rem;color:#1B2A41;}
+  .ehw__sd{margin:0;color:#5a6b7d;font-size:1.4rem;line-height:1.55;}
+  @media (max-width:749px){.ehw__grid{grid-template-columns:1fr;gap:12px;}.ehw{padding:36px 0 40px;}}
+</style>
+{% schema %}
+{
+  "name": "ESTRY How It Works",
+  "settings": [
+    {"type": "text", "id": "heading", "label": "Heading", "default": "How to Find Your Battery"},
+    {"type": "text", "id": "subheading", "label": "Subheading", "default": "Three steps from device model to doorstep"}
+  ],
+  "blocks": [
+    {"type": "step", "name": "Step", "settings": [
+      {"type": "text", "id": "title", "label": "Title"},
+      {"type": "textarea", "id": "text", "label": "Text"}
+    ]}
+  ],
+  "presets": [{"name": "ESTRY How It Works"}]
+}
+{% endschema %}

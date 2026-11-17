@@ -1,0 +1,6 @@
+#* * * * * python3 /data/wwwroot/Productschooser/manage.py process_tasks >> /data/wwwroot/Productschooser/cron_log.log 2>&1
+0 15 */2 * * python3 /data/BM_New_Hk/BM/inventory_manage/cs_shopify/update_inventory_by_location.py
+0 9 * * * python3 /data/BM_New_Hk/BM/orders_manager/cs_shopify/shopify_manage_order.py
+*/5 * * * * flock -xn /tmp/stargate.lock -c /usr/local/qcloud/stargate/admin/start.sh > /dev/null 2>&1 &
+0 8 * * * cd /home/jason/shopify-admin && .venv/bin/python deploy/ads_watch.py >> logs/cron_watch.log 2>&1
+0 9 30 11 * cd /home/jason/shopify-admin && .venv/bin/python deploy/ads_review_2w.py >> logs/cron_review.log 2>&1

@@ -1,0 +1,64 @@
+{% comment %} estry-search-hero-v1: homepage big search {% endcomment %}
+<section class="esh" role="region" aria-label="Battery search">
+  <div class="esh__inner page-width">
+    <p class="esh__kicker">{{ section.settings.kicker | escape }}</p>
+    <h2 class="esh__title">{{ section.settings.heading | escape }}</h2>
+    <form action="/pages/battery-search" method="get" role="search" class="esh__form">
+                  <input class="esh__input" type="search" name="q" value="{{ search.terms | escape }}"
+             placeholder="{{ section.settings.placeholder | escape }}"
+             aria-label="Search batteries" autocomplete="off">
+      <button type="submit" class="esh__btn">
+        <svg class="esh__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <span>{{ section.settings.button_label | escape }}</span>
+      </button>
+    </form>
+    <div class="esh__chips">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.label != blank -%}
+          <a class="esh__chip" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 字号说明：Dawn 全局 html{font-size:62.5%}，1rem=10px——按 px÷10 写 rem */
+  .esh{background:linear-gradient(135deg,#1B2A41 0%,#243a57 55%,#16233a 100%);}
+  .esh__inner{padding:56px 1.5rem 48px;text-align:center;color:#fff;}
+  .esh__kicker{margin:0 0 8px;font-size:1.2rem;letter-spacing:.12em;text-transform:uppercase;color:#9fd8b8;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .esh__title{margin:0 0 24px;font-size:clamp(2.6rem,4vw,3.6rem);line-height:1.15;color:#fff;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .esh__form{display:flex;gap:10px;max-width:760px;margin:0 auto;}
+  .esh__input{flex:1 1 auto;height:58px;border:none;border-radius:10px;padding:0 18px;font-size:1.6rem;color:#1B2A41;background:#fff;outline:none;min-width:0;}
+  .esh__input:focus{box-shadow:0 0 0 3px rgba(0,166,81,.4);}
+  .esh__btn{flex:0 0 auto;height:58px;padding:0 26px;border:none;border-radius:10px;background:#00A651;color:#fff;font-size:1.6rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s;}
+  .esh__btn:hover{background:#008a43;}
+  .esh__ico{width:20px;height:20px;}
+  .esh__chips{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .esh__chip{padding:7px 16px;border-radius:999px;background:rgba(255,255,255,.10);color:#e8eef5;font-size:1.3rem;text-decoration:none;border:1px solid rgba(255,255,255,.16);transition:background .15s,border-color .15s;}
+  .esh__chip:hover{background:#00A651;border-color:#00A651;color:#fff;}
+  @media (max-width:749px){
+    .esh__inner{padding:40px 1rem 36px;}
+    .esh__form{flex-direction:column;}
+    .esh__btn{justify-content:center;}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ESTRY Search Hero",
+  "settings": [
+    {"type": "text", "id": "kicker", "label": "Kicker", "default": "OEM & replacement batteries for 10,000+ device models"},
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Find Your Battery in Seconds"},
+    {"type": "text", "id": "placeholder", "label": "Search placeholder", "default": "Enter device model, part number or brand (e.g. Dyson V8)"},
+    {"type": "text", "id": "button_label", "label": "Button label", "default": "Search"}
+  ],
+  "blocks": [
+    {"type": "chip", "name": "Popular link", "settings": [
+      {"type": "text", "id": "label", "label": "Label"},
+      {"type": "url", "id": "link", "label": "Link"}
+    ]}
+  ],
+  "presets": [{"name": "ESTRY Search Hero"}]
+}
+{% endschema %}

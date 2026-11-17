@@ -1,0 +1,85 @@
+{% comment %} estry-certificates-v1: compliance wall {% endcomment %}
+<section class="crt">
+  <div class="crt-hero">
+    <div class="page-width">
+      <p class="crt-hero__k">{{ section.settings.kicker | escape }}</p>
+      <h1 class="crt-hero__t">{{ section.settings.heading | escape }}</h1>
+      <p class="crt-hero__s">{{ section.settings.sub | escape }}</p>
+    </div>
+  </div>
+
+  <div class="crt-body page-width">
+    <div class="crt-grid">
+      {%- for block in section.blocks -%}
+      <div class="crt-card" {{ block.shopify_attributes }}>
+        <div class="crt-card__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3 class="crt-card__t">{{ block.settings.title | escape }}</h3>
+        <p class="crt-card__d">{{ block.settings.desc | escape }}</p>
+      </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="crt-flow">
+      <h2 class="crt-flow__t">Request a certificate in 3 steps</h2>
+      <ol class="crt-steps">
+        <li><i>1</i><div><b>Submit your models</b><span>List battery models or OEM part numbers via the inquiry form</span></div></li>
+        <li><i>2</i><div><b>Verification (1 business day)</b><span>Our engineers match documents to your exact batch</span></div></li>
+        <li><i>3</i><div><b>Receive by email</b><span>Signed PDFs, ready for customs and your compliance file</span></div></li>
+      </ol>
+      <a class="crt-cta" href="/pages/wholesale?need=certs">Request Certificates</a>
+      <p class="crt-note">Certificates are issued per shipment batch and included free with every wholesale order. Retail customers: contact us with your order number.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .crt{--navy:#1B2A41;--green:#00A651;--green-d:#008A43;--line:#D9E2EC;--mut:#5A6B7F;}
+  .crt-hero{background:linear-gradient(135deg,#1B2A41 0%,#243a57 60%,#16233a 100%);padding:40px 0 34px;color:#fff;text-align:center;}
+  .crt-hero__k{margin:0 0 6px;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:#9fd8b8;font-family:var(--font-heading-family);}
+  .crt-hero__t{margin:0 0 10px;font-size:clamp(2.4rem,4vw,3.4rem);color:#fff;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .crt-hero__s{margin:0 auto;max-width:640px;font-size:1.5rem;color:#aebdd2;}
+  .crt-body{padding:34px 0 56px;}
+  .crt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:860px;margin:0 auto;}
+  .crt-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 22px;transition:all .18s;position:relative;overflow:hidden;}
+  .crt-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--green),#0dbd63);}
+  .crt-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(27,42,65,.13);border-color:#bfe5cf;}
+  .crt-card__badge{width:52px;height:52px;border-radius:12px;background:#e7f5ed;color:var(--green-d);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .crt-card__badge svg{width:28px;height:28px;}
+  .crt-card__t{margin:0 0 7px;font-size:1.7rem;color:var(--navy);font-family:var(--font-heading-family);font-weight:600;}
+  .crt-card__d{margin:0;font-size:1.3rem;line-height:1.55;color:var(--mut);}
+  .crt-flow{margin-top:44px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 34px;text-align:center;}
+  .crt-flow__t{margin:0 0 24px;font-size:2.2rem;color:var(--navy);font-family:var(--font-heading-family);font-weight:600;}
+  .crt-steps{list-style:none;margin:0 auto 26px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:820px;text-align:left;}
+  .crt-steps li{display:flex;gap:12px;align-items:flex-start;}
+  .crt-steps i{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:var(--green);color:#fff;font-style:normal;font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;}
+  .crt-steps b{display:block;font-size:1.4rem;color:var(--navy);margin-bottom:2px;}
+  .crt-steps span{font-size:1.25rem;color:var(--mut);line-height:1.45;}
+  .crt-cta{display:inline-block;background:var(--green);color:#fff;border-radius:10px;padding:14px 34px;font-size:1.6rem;font-weight:700;text-decoration:none;transition:background .15s;}
+  .crt-cta:hover{background:var(--green-d);}
+  .crt-note{margin:16px auto 0;max-width:640px;font-size:1.2rem;color:var(--mut);}
+  @media (max-width:989px){
+    .crt-grid{grid-template-columns:1fr;}
+    .crt-steps{grid-template-columns:1fr;max-width:420px;}
+    .crt-flow{padding:24px 18px;}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "ESTRY Certificates",
+  "settings": [
+    {"type": "text", "id": "kicker", "label": "Kicker", "default": "Compliance & Certification"},
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Battery Compliance Documents"},
+    {"type": "text", "id": "sub", "label": "Subtitle", "default": "UN 38.3 test summaries and MSDS/SDS for every model - free with wholesale orders."}
+  ],
+  "blocks": [
+    {"type": "cert", "name": "Certificate card", "settings": [
+      {"type": "text", "id": "title", "label": "Title"},
+      {"type": "textarea", "id": "desc", "label": "Description"}
+    ]}
+  ],
+  "presets": [{"name": "ESTRY Certificates"}]
+}
+{% endschema %}

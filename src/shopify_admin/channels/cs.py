@@ -10,28 +10,35 @@
 
 注意：bmai 的 CSFulfillment.process 硬编码 platform="amazon"，故此处按其流程
 自行编排（去重->解析->地址->运输方式->dropship/create->记录），语义对齐。
+运输方式决策已上收 CS API 服务端（契约 3.2.1，GET /v1/fulfillment/ship-method），
+本地不再持有决策树副本。
 """
 from __future__ import annotations
 
 from decimal import Decimal
 
+import httpx
 from loguru import logger
 
 from shopify_admin.channels.base import (
     Address, ChannelInventory, ChannelOrderRef, ChannelOrderStatus,
     FulfillmentChannel, FulfillmentRequest, Parcel, ShippingQuote,
 )
+from shopify_admin.config.settings import settings
 from shopify_admin.core.exceptions import ChannelError, RouteError
 
 
 class CsChannel(FulfillmentChannel):
     name = "cs"
 
-    def __init__(self, rcustomerno: str = "", store_name: str = ""):
+    def __init__(self, rcustomerno: str = "", store_name: str = "",
+                 transport: httpx.BaseTransport | None = None):
         self.rcustomerno = str(rcustomerno or "").strip()
         self.store_name = store_name
         self._resolver = None
         self._client = None
+        self._transport = transport
+        self._http: httpx.Client | None = None
 
     # ------------------------------------------------------------------
     def _sku_to_csid(self, sku: str) -> str:
@@ -89,11 +96,11 @@ class CsChannel(FulfillmentChannel):
         request.order_ref = Shopify 订单号（name，如 #1234）
         lines[i].cs_id 可预置，缺省时经 SkuResolver 解析。
         """
+        if len(request.lines) != 1:
+            raise ChannelError("CS 渠道一次下单仅支持单行项（逐行项编排由履约服务负责）", channel="cs")
         from bmai.services.fulfillment.cs.address_maps import map_country, map_state
         from bmai.services.fulfillment.recorder import OrderRecorder
 
-        if len(request.lines) != 1:
-            raise ChannelError("CS 渠道一次下单仅支持单行项（逐行项编排由履约服务负责）", channel="cs")
         line = request.lines[0]
         cs_id = line.cs_id or self._sku_to_csid(line.sku)
         order_item_id = line.order_item_id
@@ -108,7 +115,14 @@ class CsChannel(FulfillmentChannel):
         ship = request.ship_to
         country = map_country(ship.country_code)
         province = map_state(ship.province)
-        ship_method = self._select_ship_method(ship.country_code, request.extra.get("main_ship_by", ""))
+        # ★老 main_ship_by（如 "USPS First Class"）是备注信息不是 UC 编码，
+        # 绝不能传入 ship_method 决策参数（美国单必 422，2026-11-02 事故）；
+        # 契约语义：不参与决策，拼入 CIM remark 尾部（同 bmai build_remark）。
+        main_ship_by = str(request.extra.get("main_ship_by") or "")
+        ship_method = self._select_ship_method(ship.country_code)
+        # bmai.services.cs.service.build_remark 的本地等价实现：
+        # remark 与 main_ship_by 以 " | " 连接非空部分（部署端 bmai 同语义）。
+        remark = " | ".join(p for p in (request.remark or "shopify-admin", main_ship_by) if p)
 
         data = {
             "thirdOrderId": request.order_ref,
@@ -126,7 +140,7 @@ class CsChannel(FulfillmentChannel):
             "shipMethod": ship_method,
             "itemNum": line.quantity,
             "autoShip": True,
-            "remark": request.remark or "shopify-admin",
+            "remark": remark,
         }
         resp = self._cim().post("dropship/create", data, extra_headers={"fromsystem": "shopify-admin"})
         cs_order_id = str(resp.get("dropShipId") or resp.get("id") or "")
@@ -193,16 +207,37 @@ class CsChannel(FulfillmentChannel):
             return False
 
     # ------------------------------------------------------------------
-    @staticmethod
-    def _select_ship_method(country_code: str, main_ship_by: str) -> str:
-        """运输方式决策（对齐 bmai CSFulfillment 的决策树）。"""
-        cc = (country_code or "").upper()
-        if cc == "US":
-            by = (main_ship_by or "").upper()
-            if by in ("UC01", "UC02", "UC03", "UC04"):
-                return by
-            return "UC01"  # 默认 US 标准
-        if cc == "CA":
-            return "UC01"
-        # 其余地区（含 GB/EU/AU）
-        return "UC02"
+    def _select_ship_method(self, country_code: str, ship_method: str | None = None) -> str:
+        """运输方式决策——已上收 CS API 服务端（契约 3.2.1），本地不再持有决策树副本。
+
+        服务端为唯一事实源（CS 平台真实渠道名：USPS / CS - USPS / USPS First Class /
+        USPS Priority Mail / UPS Ground / ZT / FI；缺省按目的国/瓦时/重量决策；
+        UC01~UC04 系无平台依据的已废除编码）。未配置或不可达即失败，不做本地降级。
+
+        ship_method 仅接受消费者显式指定的渠道名并交服务端校验；
+        语义上属于备注的值（如店铺 main_ship_by="USPS First Class"）
+        不得作为决策传入——服务端按词表校验，非法值返回 VALIDATION_ERROR。
+        """
+        if not (settings.cs_api_base and settings.cs_api_key):
+            raise ChannelError("CS API 未配置（CS_API_BASE / CS_API_KEY）", channel="cs")
+        if self._http is None:
+            self._http = httpx.Client(timeout=5, transport=self._transport)
+        params: dict = {"country_code": country_code or ""}
+        if ship_method:
+            params["ship_method"] = ship_method
+        try:
+            resp = self._http.get(
+                f"{settings.cs_api_base.rstrip('/')}/v1/fulfillment/ship-method",
+                params=params,
+                headers={"X-API-Key": settings.cs_api_key},
+            )
+        except httpx.HTTPError as e:
+            raise ChannelError(f"CS API 决策端点不可达: {e}", channel="cs") from e
+        if resp.status_code != 200:
+            raise ChannelError(
+                f"CS API 决策失败 HTTP {resp.status_code}: {resp.text[:200]}", channel="cs"
+            )
+        try:
+            return resp.json()["ship_method"]
+        except (ValueError, KeyError) as e:
+            raise ChannelError(f"CS API 决策响应异常: {e}", channel="cs") from e

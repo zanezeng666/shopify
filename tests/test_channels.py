@@ -2,7 +2,9 @@
 """渠道层单测：FastRite 签名/HTTP 行为 + CS 约束与决策树。"""
 from __future__ import annotations
 
+import importlib.util
 import json
+import types
 
 import httpx
 import pytest
@@ -14,6 +16,11 @@ from shopify_admin.channels.cs import CsChannel
 from shopify_admin.channels.fastrite import FastRiteChannel
 from shopify_admin.config.settings import settings
 from shopify_admin.core.exceptions import ChannelError, RouteError
+
+requires_bmai = pytest.mark.skipif(
+    importlib.util.find_spec("bmai") is None,
+    reason="CS 渠道深层链路需本地 bmai（uv pip install -e ../BMAI）",
+)
 
 
 # ----------------------------------------------------------------------
@@ -146,6 +153,7 @@ def test_cs_multi_line_rejected():
         ch.submit_order(req)
 
 
+@requires_bmai
 def test_cs_no_rcustomerno_rejected():
     ch = CsChannel()
     req = FulfillmentRequest(
@@ -155,15 +163,95 @@ def test_cs_no_rcustomerno_rejected():
         ch.submit_order(req)
 
 
-def test_cs_ship_method_decision():
-    f = CsChannel._select_ship_method
-    assert f("US", "") == "UC01"
-    assert f("US", "uc02") == "UC02"
-    assert f("CA", "") == "UC01"
-    assert f("GB", "") == "UC02"
-    assert f("AU", "auto") == "UC02"
+def _cs_api(monkeypatch, handler):
+    """决策树已上收 CS API：注入 MockTransport 与配置的 CsChannel。"""
+    ch = CsChannel(transport=httpx.MockTransport(handler))
+    monkeypatch.setattr(settings, "cs_api_base", "http://cs-api.test")
+    monkeypatch.setattr(settings, "cs_api_key", "k1")
+    return ch
 
 
+def test_cs_ship_method_from_cs_api(monkeypatch):
+    captured = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["path"] = request.url.path
+        captured["country"] = request.url.params.get("country_code")
+        captured["method"] = request.url.params.get("ship_method")
+        captured["key"] = request.headers.get("X-API-Key")
+        return httpx.Response(200, json={"country_code": "US", "ship_method": "USPS Priority Mail"})
+
+    ch = _cs_api(monkeypatch, handler)
+    assert ch._select_ship_method("US", "usps priority mail") == "USPS Priority Mail"
+    assert captured["path"].endswith("/v1/fulfillment/ship-method")
+    assert captured["country"] == "US"
+    assert captured["method"] == "usps priority mail"
+    assert captured["key"] == "k1"
+
+
+def test_cs_ship_method_default_omits_param(monkeypatch):
+    """缺省决策不带 ship_method 参数——老 main_ship_by（非 UC 编码）绝不进决策。
+
+    2026-11-02 事故回归锁：main_ship_by="USPS First Class" 曾被误传为
+    ship_method，导致美国订单决策端点 422 VALIDATION_ERROR、下单全挂。
+    """
+    captured = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["method"] = request.url.params.get("ship_method")
+        return httpx.Response(200, json={"country_code": "US", "ship_method": "USPS"})
+
+    ch = _cs_api(monkeypatch, handler)
+    assert ch._select_ship_method("US") == "USPS"
+    assert captured["method"] is None
+
+
+@requires_bmai
+def test_cs_submit_order_remark_contains_main_ship_by(monkeypatch):
+    """submit_order：main_ship_by 拼入 CIM remark（契约语义），不进决策参数。"""
+    captured = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["method_param"] = request.url.params.get("ship_method")
+        return httpx.Response(200, json={"country_code": "US", "ship_method": "USPS"})
+
+    ch = _cs_api(monkeypatch, handler)
+    ch.rcustomerno = "123"
+    monkeypatch.setattr(
+        CsChannel, "_cim", lambda self: types.SimpleNamespace(
+            post=lambda path, data, **kw: (
+                captured.update(payload=data), {"dropShipId": "DS-1"} or {})[1]
+        ),
+    )
+
+    req = FulfillmentRequest(
+        order_ref="#1001",
+        lines=[FulfillmentLine(sku="CS-TEST1", cs_id="CS-TEST1", quantity=1)],
+        ship_to=Address(name="John", country_code="US", city="LA", zip="90001", address1="1 Main St"),
+        extra={"main_ship_by": "USPS First Class"},
+    )
+    ref = ch.submit_order(req)
+    assert ref.order_id == "DS-1"
+    assert ref.raw["shipMethod"] == "USPS"
+    assert captured["method_param"] is None
+    assert captured["payload"]["remark"] == "shopify-admin | USPS First Class"
+
+
+def test_cs_ship_method_api_error_raises(monkeypatch):
+    ch = _cs_api(monkeypatch, lambda r: httpx.Response(
+        502, json={"error": {"code": "CIM_UPSTREAM_ERROR"}}))
+    with pytest.raises(ChannelError):
+        ch._select_ship_method("US")
+
+
+def test_cs_ship_method_unconfigured_raises():
+    ch = CsChannel()  # 默认 settings 未配置 CS API 时应明确报错（而非静默降级）
+    if not (settings.cs_api_base and settings.cs_api_key):
+        with pytest.raises(ChannelError):
+            ch._select_ship_method("US")
+
+
+@requires_bmai
 def test_cs_sku_resolve_failure(monkeypatch):
     """SkuResolver 双路未命中 -> RouteError。"""
     import types

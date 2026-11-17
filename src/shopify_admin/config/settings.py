@@ -79,6 +79,16 @@ class Settings(BaseSettings):
     scheduler_product_sync_price_mode: str = "report"   # report|overwrite（定价归 pricing 引擎，此处保持 report）
     scheduler_product_sync_max_ops: int = 300           # 每店每轮创建/更新各上限（限流收敛）
 
+    # ---- Google Ads API（2026-09-09 新体系：权限绑定 GCP 项目，developer token 已停用）----
+    google_ads_client_id: str = ""
+    google_ads_client_secret: str = ""
+    google_ads_refresh_token: str = ""      # deploy/get_google_ads_refresh_token.py 本地一次性授权获取
+    google_ads_customer_id: str = ""        # 主广告账户 xxx-xxx-xxxx（查询/操作用）
+    google_ads_developer_token: str = ""    # 2026-09-09 已停用；空则库配置给占位值（服务器忽略）
+    # 转化动作资源名 customers/<id>/conversionActions/<n>（Ads 后台：目标→转化→网站→手动设置，
+    # 建好后取资源名填此键；为空时转化回传会给出中文指引）
+    google_ads_conversion_action: str = ""
+
     # ---- 定价引擎（2026-11-04 用户拍板；services/pricing）----
     pricing_payment_rate: float = 0.029        # 收款费率（售价占比，Shopify Payments）
     pricing_payment_fixed: float = 0.30        # 收款固定费/单

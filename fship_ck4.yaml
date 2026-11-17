@@ -1,0 +1,346 @@
+- generic [ref=f103e2]:
+  - generic [ref=f103e4]:
+    - status [ref=f103e5]
+    - generic [ref=f103e6]:
+      - generic [ref=f103e7]:
+        - link "Skip to content" [ref=f103e8] [cursor=pointer]:
+          - /url: "#checkout-main"
+        - generic [ref=f103e9]:
+          - banner [ref=f103e10]:
+            - generic [ref=f103e15]:
+              - link "Estry Navigate to Online Store" [ref=f103e17] [cursor=pointer]:
+                - /url: https://www.estrybattery.com
+                - generic: Estry
+                - generic [ref=f103e18]: Navigate to Online Store
+              - link "Cart" [ref=f103e20] [cursor=pointer]:
+                - /url: https://www.estrybattery.com/cart
+          - generic [ref=f103e24]:
+            - generic [ref=f103e26]:
+              - main [ref=f103e27]:
+                - heading "Estry Checkout" [level=1] [ref=f103e28]
+                - generic [ref=f103e30]:
+                  - status [ref=f103e31]
+                  - generic [ref=f103e32]:
+                    - generic [ref=f103e33]:
+                      - generic [ref=f103e34]:
+                        - region [ref=f103e35]:
+                          - generic [ref=f103e37]:
+                            - heading "Express checkout" [level=2] [ref=f103e39]
+                            - list [ref=f103e326]:
+                              - listitem [ref=f103e44]:
+                                - iframe [ref=f103e328]:
+                                  - generic [ref=f106e1]:
+                                    - button "PayPal" [ref=f106e4] [cursor=pointer]:
+                                      - img [ref=f106e5]:
+                                        - img "PayPal" [ref=f106e6]
+                                    - generic:
+                                      - generic "PayPal"
+                                    - generic:
+                                      - generic "PayPal"
+                                    - generic:
+                                      - generic "PayPal"
+                                    - generic:
+                                      - generic "PayPal"
+                                    - generic:
+                                      - generic "PayPal"
+                                    - generic:
+                                      - generic "PayPal"
+                        - generic [ref=f103e47]:
+                          - paragraph [ref=f103e48]: OR
+                          - separator
+                      - region "Contact" [ref=f103e49]:
+                        - generic [ref=f103e53]:
+                          - generic [ref=f103e54]:
+                            - heading "Contact" [level=2] [ref=f103e55]
+                            - link "Sign in" [ref=f103e56] [cursor=pointer]:
+                              - /url: https://www.estrybattery.com/customer_authentication/login?locale=en-US&region_country=US&return_to=%2Fcheckouts%2Fcn%2FhWNJ5knpFM3z7gzpnm9fp2JA%2Fen-us%3F_r%3DAQABNIAXIxkSfJxqIF9sgz2YEiicEJNPDykBb5tbeCfcTz9dNVXu%26locale%3Den-US&skip_first_sign_in_form=true
+                          - generic [ref=f103e58]:
+                            - generic [ref=f103e62]:
+                              - generic: Email or mobile phone number
+                              - textbox "Email or mobile phone number" [ref=f103e63]
+                              - generic [ref=f103e65]:
+                                - img "More information about how your contact info is used" [ref=f103e67]
+                                - tooltip [aria-hidden] [ref=f103e70]: Used for your order confirmation and cart reminders
+                            - generic [ref=f103e73]:
+                              - checkbox "Email me with news and offers" [ref=f103e75] [cursor=pointer]
+                              - generic [ref=f103e76] [cursor=pointer]: Email me with news and offers
+                      - group [ref=f103e80]:
+                        - generic [ref=f103e81]:
+                          - heading "Delivery" [level=2] [ref=f103e83]
+                          - generic [ref=f103e88]:
+                            - generic [ref=f103e92]:
+                              - generic [ref=f103e93]:
+                                - generic [ref=f103e97]:
+                                  - generic: Country/Region
+                                  - combobox "Country/Region" [ref=f103e98]:
+                                    - option "Canada"
+                                    - option "Mexico"
+                                    - option "South Africa"
+                                    - option "United Kingdom"
+                                    - option "United States" [selected]
+                                - generic [ref=f103e99]:
+                                  - generic [ref=f103e101]:
+                                    - generic: First name (optional)
+                                    - textbox "First name (optional)" [ref=f103e102]: QA
+                                  - generic [ref=f103e104]:
+                                    - generic: Last name
+                                    - textbox "Last name" [ref=f103e105]: FreeShip
+                                - generic [ref=f103e108]:
+                                  - generic: Company (optional)
+                                  - textbox "Company (optional)" [ref=f103e109]
+                                - generic [ref=f103e331]:
+                                  - generic: Address
+                                  - combobox "Address" [ref=f103e332]: 1600 Pennsylvania Ave NW
+                                - generic [ref=f103e122]:
+                                  - generic: Apartment, suite, etc. (optional)
+                                  - textbox "Apartment, suite, etc. (optional)" [ref=f103e123]
+                                - generic [ref=f103e124]:
+                                  - generic [ref=f103e126]:
+                                    - generic: City
+                                    - textbox "City" [ref=f103e127]: Washington
+                                  - generic [ref=f103e130]:
+                                    - generic: State
+                                    - combobox "State" [ref=f103e131]:
+                                      - option "Alabama"
+                                      - option "Alaska"
+                                      - option "American Samoa"
+                                      - option "Arizona"
+                                      - option "Arkansas"
+                                      - option "California"
+                                      - option "Colorado"
+                                      - option "Connecticut"
+                                      - option "Delaware"
+                                      - option "Micronesia"
+                                      - option "Florida"
+                                      - option "Georgia"
+                                      - option "Guam"
+                                      - option "Hawaii"
+                                      - option "Idaho"
+                                      - option "Illinois"
+                                      - option "Indiana"
+                                      - option "Iowa"
+                                      - option "Kansas"
+                                      - option "Kentucky"
+                                      - option "Louisiana"
+                                      - option "Maine"
+                                      - option "Marshall Islands"
+                                      - option "Maryland"
+                                      - option "Massachusetts"
+                                      - option "Michigan"
+                                      - option "Minnesota"
+                                      - option "Mississippi"
+                                      - option "Missouri"
+                                      - option "Montana"
+                                      - option "Nebraska"
+                                      - option "Nevada"
+                                      - option "New Hampshire"
+                                      - option "New Jersey"
+                                      - option "New Mexico"
+                                      - option "New York"
+                                      - option "North Carolina"
+                                      - option "North Dakota"
+                                      - option "Northern Mariana Islands"
+                                      - option "Ohio"
+                                      - option "Oklahoma"
+                                      - option "Oregon"
+                                      - option "Palau"
+                                      - option "Pennsylvania"
+                                      - option "Puerto Rico"
+                                      - option "Rhode Island"
+                                      - option "South Carolina"
+                                      - option "South Dakota"
+                                      - option "Tennessee"
+                                      - option "Texas"
+                                      - option "Utah"
+                                      - option "Vermont"
+                                      - option "Virginia"
+                                      - option "Washington"
+                                      - option "Washington DC" [selected]
+                                      - option "West Virginia"
+                                      - option "Wisconsin"
+                                      - option "Wyoming"
+                                      - option "U.S. Virgin Islands"
+                                      - option "Armed Forces Americas"
+                                      - option "Armed Forces Europe"
+                                      - option "Armed Forces Pacific"
+                                  - generic [ref=f103e134]:
+                                    - generic: ZIP code
+                                    - textbox "ZIP code" [ref=f103e135]: "20500"
+                                - generic [ref=f103e138]:
+                                  - generic: Phone (optional)
+                                  - textbox "Phone (optional)" [ref=f103e139]
+                                  - generic [ref=f103e141]:
+                                    - img "More information about Phone" [ref=f103e142]
+                                    - tooltip [aria-hidden] [ref=f103e145]: In case we need to contact you about your order
+                                - generic [ref=f103e147]:
+                                  - checkbox "Save this information for next time" [ref=f103e149] [cursor=pointer]
+                                  - generic [ref=f103e150] [cursor=pointer]: Save this information for next time
+                              - generic [ref=f103e151]:
+                                - textbox [aria-hidden] [ref=f103e152]: QA
+                                - textbox [aria-hidden] [ref=f103e153]: FreeShip
+                                - textbox [aria-hidden] [ref=f103e154]
+                                - textbox [aria-hidden] [ref=f103e155]: 1600 Pennsylvania Ave NW
+                                - textbox [aria-hidden] [ref=f103e156]
+                                - textbox [aria-hidden] [ref=f103e157]: Washington
+                                - textbox [aria-hidden] [ref=f103e158]: US
+                                - textbox [aria-hidden] [ref=f103e159]: DC
+                                - textbox [aria-hidden] [ref=f103e160]: DC
+                                - textbox [aria-hidden] [ref=f103e161]: DC
+                                - textbox [aria-hidden] [ref=f103e162]: "20500"
+                                - textbox [aria-hidden] [ref=f103e163]
+                            - generic [ref=f103e164]:
+                              - heading "Shipping method" [level=2] [ref=f103e165]
+                              - group "Choose a shipping method" [ref=f103e173]:
+                                - group [ref=f103e175]:
+                                  - generic [ref=f103e176]:
+                                    - generic [ref=f103e178] [cursor=pointer]:
+                                      - radio "Free Shipping (orders $69+)" [checked] [ref=f103e180]
+                                      - paragraph [ref=f103e183]:
+                                        - strong [ref=f103e184]: Free Shipping (orders $69+)
+                                      - strong [ref=f103e186]: Free
+                                    - generic [ref=f103e188] [cursor=pointer]:
+                                      - radio "Standard Shipping (3-6 business days)" [ref=f103e190]
+                                      - paragraph [ref=f103e193]:
+                                        - strong [ref=f103e194]: Standard Shipping (3-6 business days)
+                                      - strong [ref=f103e196]: $9.99
+                      - region "Payment" [ref=f103e337]:
+                        - group [ref=f103e341]:
+                          - generic [ref=f103e342]:
+                            - heading "Payment" [level=2] [ref=f103e345]
+                            - paragraph [ref=f103e347]: All transactions are secure and encrypted.
+                          - generic [ref=f103e349]:
+                            - generic [ref=f103e350]:
+                              - group [ref=f103e356]:
+                                - generic [ref=f103e357]:
+                                  - generic [ref=f103e358]:
+                                    - generic [ref=f103e359] [cursor=pointer]:
+                                      - generic [ref=f103e360]:
+                                        - radio "PayPal" [checked] [ref=f103e362]
+                                        - strong [ref=f103e364]: PayPal
+                                      - img "PayPal" [ref=f103e366]
+                                    - paragraph [ref=f103e373]: You'll be redirected to PayPal to complete your purchase
+                                  - generic [ref=f103e375] [cursor=pointer]:
+                                    - generic [ref=f103e376]:
+                                      - radio "Cards and Local Payment Methods, jcb, unionpay, diners_club, discover, boleto, pix, mcash, qr_promptpay, krungsri, bangkokbank, maybank, cimb, bni, mandiri, permata, bri, ovo, qris, akulaku, kakao_pay, payco, naver_pay, afterpay, wechatpay, alipay, bpi, gcash, boost, touchngo, rabbitlinepay, truemoney_pay, dana, maya, grabpay, coinsph, jko, zalopay, pay_pay, qrpaymentslip, and onlinebanktransfer" [ref=f103e378]
+                                      - strong [ref=f103e380]: Cards and Local Payment Methods
+                                    - generic [ref=f103e383]:
+                                      - img "visa" [ref=f103e384]
+                                      - img "master" [ref=f103e385]
+                                      - img "american express" [ref=f103e386]
+                                      - generic [ref=f103e388]: "+40"
+                                      - tooltip [aria-hidden] [ref=f103e391]
+                              - group [ref=f103e433]:
+                                - heading "Billing address" [level=3] [ref=f103e434]
+                                - group [ref=f103e435]:
+                                  - generic [ref=f103e436]:
+                                    - generic [ref=f103e438] [cursor=pointer]:
+                                      - radio "Same as shipping address" [checked] [ref=f103e440]
+                                      - strong [ref=f103e443]: Same as shipping address
+                                    - generic [ref=f103e445] [cursor=pointer]:
+                                      - radio "Use a different billing address" [ref=f103e447]
+                                      - strong [ref=f103e450]: Use a different billing address
+                            - button "Add discount" [ref=f103e451] [cursor=pointer]
+                        - generic [ref=f103e459]:
+                          - heading "Finalize order" [level=2] [ref=f103e460]
+                          - iframe [ref=f103e467]:
+                            - generic [ref=f107e1]:
+                              - button "Pay now" [ref=f107e3] [cursor=pointer]
+                              - generic:
+                                - generic "PayPal"
+                              - generic:
+                                - generic "PayPal"
+                              - generic:
+                                - generic "PayPal"
+                              - generic:
+                                - generic "PayPal"
+                              - generic:
+                                - generic "PayPal"
+                              - generic:
+                                - generic "PayPal"
+                    - button [aria-hidden] [ref=f103e206] [cursor=pointer]: Submit
+              - contentinfo [ref=f103e207]:
+                - list [ref=f103e211]:
+                  - listitem [ref=f103e212]:
+                    - button "Terms and policies" [ref=f103e213] [cursor=pointer]
+            - complementary [ref=f103e216]:
+              - generic [ref=f103e220]:
+                - heading "Order summary" [level=2] [ref=f103e221]
+                - generic [ref=f103e224]:
+                  - region "Shopping cart" [ref=f103e225]:
+                    - heading "Shopping cart" [level=3] [ref=f103e227]
+                    - table "Shopping cart" [ref=f103e228]:
+                      - rowgroup [ref=f103e229]:
+                        - row "Product image Description Quantity Price":
+                          - columnheader "Product image" [ref=f103e230]
+                          - columnheader "Description" [ref=f103e231]
+                          - columnheader "Quantity" [ref=f103e232]
+                          - columnheader "Price" [ref=f103e233]
+                      - rowgroup [ref=f103e234]:
+                        - row "Quantity 12 Battery for 18650 18650x4 5200mAh 12 $371.88" [ref=f103e235]:
+                          - cell "Quantity 12" [ref=f103e236]:
+                            - generic [ref=f103e239]:
+                              - generic [ref=f103e240]: Quantity
+                              - text: "12"
+                          - cell [ref=f103e241]:
+                            - generic [ref=f103e242]:
+                              - paragraph [ref=f103e243]: Battery for 18650 18650x4
+                              - paragraph [ref=f103e245]: 5200mAh
+                          - cell "12"
+                          - cell "$371.88" [ref=f103e247]
+                  - generic [aria-hidden]:
+                    - generic: Scroll for more items
+                - generic [ref=f103e252]:
+                  - heading "Discount" [level=3] [ref=f103e253]
+                  - generic [ref=f103e254]:
+                    - generic [ref=f103e257]:
+                      - generic [ref=f103e260]:
+                        - generic: Discount code
+                        - textbox "Discount code" [ref=f103e261]
+                        - generic [ref=f103e262]:
+                          - button "Apply Discount Code" [disabled]:
+                            - generic: Apply
+                      - button [aria-hidden] [ref=f103e264] [cursor=pointer]: Submit
+                    - button "Back to finalize order" [ref=f103e265] [cursor=pointer]
+                - generic [ref=f103e266]:
+                  - heading "Cost summary" [level=3] [ref=f103e268]
+                  - table "Cost summary" [ref=f103e269]:
+                    - rowgroup [ref=f103e270]:
+                      - row [ref=f103e271]:
+                        - columnheader "Item" [ref=f103e272]
+                        - columnheader "Value" [ref=f103e273]
+                    - rowgroup [ref=f103e274]:
+                      - row [ref=f103e275]:
+                        - rowheader "Subtotal" [ref=f103e276]
+                        - cell "$371.88" [ref=f103e277]
+                      - row [ref=f103e278]:
+                        - rowheader "Order discount" [ref=f103e279]
+                      - row [ref=f103e282]:
+                        - rowheader "VOLUME TIER 10+ PCS (-5%)" [ref=f103e283]
+                        - cell "− $18.59" [ref=f103e289]
+                      - row [ref=f103e290]:
+                        - rowheader "Shipping More information about Shipping" [ref=f103e291]:
+                          - generic [ref=f103e292]:
+                            - generic [ref=f103e293]: Shipping
+                            - button "More information about Shipping" [ref=f103e468] [cursor=pointer]
+                        - cell "Free" [ref=f103e298]
+                      - row [ref=f103e472]:
+                        - rowheader [ref=f103e306]:
+                          - strong [ref=f103e307]: Total
+                        - cell "USD $353.29" [ref=f103e473]:
+                          - generic [ref=f103e309]:
+                            - generic [ref=f103e310]: USD
+                            - strong [ref=f103e474]:
+                              - generic "$353.29" [ref=f103e476]
+                      - row [ref=f103e313]:
+                        - rowheader [ref=f103e314]:
+                          - generic [ref=f103e315]:
+                            - strong [ref=f103e319]: TOTAL SAVINGS
+                            - strong [ref=f103e320]: $18.59
+                        - cell
+      - generic:
+        - progressbar
+  - generic [aria-hidden] [ref=f103e321]: Opens external website in a new window.
+  - generic [aria-hidden] [ref=f103e322]: Opens in a new window.
+  - generic [aria-hidden] [ref=f103e323]: Opens external website.
+  - status [ref=f103e324]: "Updated shipping method: Free Shipping (orders $69+)"
+  - alert [ref=f103e325]

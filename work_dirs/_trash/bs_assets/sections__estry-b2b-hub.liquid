@@ -1,0 +1,58 @@
+{% comment %} estry-b2b-hub-v1: B2B services hub {% endcomment %}
+<section class="ebh" id="ebh-root">
+  <div class="page-width">
+    <p class="ebh__kicker">B2B &amp; Wholesale Services</p>
+    <h2 class="ebh__title">Everything procurement teams need, in one place</h2>
+    <div class="ebh__grid">
+      <a class="ebh__card" href="/pages/battery-search">
+        <span class="ebh__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></span>
+        <span class="ebh__t">Battery Finder</span>
+        <span class="ebh__d">Search 8,700+ models by device, brand or OEM part number.</span>
+        <span class="ebh__go">Find a battery &rarr;</span>
+      </a>
+      <a class="ebh__card" href="/pages/specification">
+        <span class="ebh__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h9l4.5 4.5v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-18a1 1 0 0 1 1-1z"/><path d="M14.5 2.5V7h5"/><path d="M8.5 12h7M8.5 15.5h7M8.5 19h4"/></svg></span>
+        <span class="ebh__t">Spec Sheets</span>
+        <span class="ebh__d">Full electrical &amp; mechanical datasheets for every model &mdash; printable / PDF.</span>
+        <span class="ebh__go">View datasheets &rarr;</span>
+      </a>
+      <a class="ebh__card" href="/pages/wholesale">
+        <span class="ebh__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5 12 3l8.5 5.5v11a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-11z"/><path d="M9 12.5h6v6H9z"/><path d="M12 9.5v3M10.5 9.5h3"/></svg></span>
+        <span class="ebh__t">Wholesale Quotes</span>
+        <span class="ebh__d">Bulk pricing, MOQ-friendly. Send your part list &mdash; quote within 24h.</span>
+        <span class="ebh__go">Request a quote &rarr;</span>
+      </a>
+      <a class="ebh__card" href="/pages/certificates">
+        <span class="ebh__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="m8.8 13.5-1.6 7 4.8-2.6 4.8 2.6-1.6-7"/><path d="m10.2 8.7 1.3 1.4 2.4-2.6"/></svg></span>
+        <span class="ebh__t">Certificates</span>
+        <span class="ebh__d">UN 38.3 test summaries &amp; MSDS &mdash; free with every wholesale order.</span>
+        <span class="ebh__go">Request docs &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+<style>
+  .ebh{--navy:#1B2A41;--green:#00A651;--green-d:#008A43;--line:#D9E2EC;background:#fff;padding:46px 0 34px;}
+  .ebh__kicker{margin:0 0 6px;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green-d);font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);text-align:center;}
+  .ebh__title{margin:0 0 26px;font-size:clamp(2rem,3.4vw,2.9rem);line-height:1.15;color:var(--navy);font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);text-align:center;}
+  .ebh__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .ebh__card{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 18px 18px;text-decoration:none;transition:all .18s;position:relative;overflow:hidden;}
+  .ebh__card::after{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,var(--green),#4cc47f);opacity:0;transition:opacity .18s;}
+  .ebh__card:hover{border-color:#bfe5cf;box-shadow:0 6px 22px rgba(27,42,65,.09);transform:translateY(-2px);}
+  .ebh__card:hover::after{opacity:1;}
+  .ebh__ico{width:42px;height:42px;border-radius:10px;background:#e7f5ed;color:var(--green-d);display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+  .ebh__ico svg{width:22px;height:22px;}
+  .ebh__t{font-size:1.65rem;font-weight:700;color:var(--navy);font-family:var(--font-heading-family);}
+  .ebh__d{font-size:1.32rem;line-height:1.5;color:#5A6B7F;}
+  .ebh__go{margin-top:auto;padding-top:8px;font-size:1.3rem;font-weight:700;color:var(--green-d);}
+  .ebh__card:hover .ebh__go{text-decoration:underline;}
+  @media (max-width:989px){.ebh__grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:570px){.ebh__grid{grid-template-columns:1fr;}}
+</style>
+{% schema %}
+{
+  "name": "Estry B2B Hub",
+  "settings": [],
+  "presets": [{"name": "Estry B2B Hub"}]
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-10",
+  "method": "Playwright 真实浏览器逐条搜索 amazon.com 搜索页，取前8个结果的卡片标题+显示价；相关性人工过滤",
+  "samples": [
+    {"sku": "CS-HIQ200SL", "our": 30.99, "key": "HP iPAQ 200 210", "relevant": [{"t": "VINTRONS 343110-001 h4100/4150 (近似型号)", "p": 136.13}, {"t": "VINTRONS iPAQ 300/310 FB078AA", "p": 206.16}], "note": "Cameron Sino 自家 listing x2 无标价"},
+    {"sku": "CS-TOX500TW", "our": 35.99, "key": "Tait Orca Elan Excel Eclipse 5000", "relevant": [{"t": "VINTRONS TAIT 5030/Excel/Eclipse/5000", "p": 498.96}], "note": "同型号强相关"},
+    {"sku": "CS-DEL552NB", "our": 44.99, "key": "Dell Precision 15 3560", "relevant": [{"t": "GRT01 64Wh Latitude/Precision 兼容", "p": 319.86}, {"t": "T0TRM Precision M3800", "p": 274.46}], "note": "无完全同型号"},
+    {"sku": "CS-SMR365SH", "our": 19.99, "key": "Samsung Gear Fit2 Pro SM-R365", "relevant": [{"t": "EB-BR365ABE 兼容 x3", "p": 146.64}]},
+    {"sku": "CS-ABL100VX", "our": 139.99, "key": "Wolf Garten R10Ac", "relevant": [{"t": "VINTRONS Wolf Garten R10Ac/R10D/R30Ac/R50Ac", "p": 1364.44}], "note": "唯一结果强相关"},
+    {"sku": "CS-MVS500VX", "our": 27.99, "key": "Xiaomi G1 Robot", "relevant": [{"t": "VINTRONS Xiaomi G1 MI-G1", "p": 342.05}, {"t": "3600mAh MI G1 MC-WRC53", "p": 143.42}]},
+    {"sku": "CS-CHM170PR", "our": 20.99, "key": "NTN LT2001 GP60AAAH2BMX", "relevant": [], "note": "CS 自家无价，其余不相关"},
+    {"sku": "CS-FNT250TW", "our": 31.99, "key": "Yaesu FT-25R SBR-25L", "relevant": [{"t": "VINTRONS SBR-25L x2", "p": 289.12}, {"t": "SBR-25Li 1950mAh", "p": 219.49}]},
+    {"sku": "CS-TMG610SL", "our": 19.99, "key": "TomTom Go 610 4FA60", "relevant": [{"t": "VINTRONS 4FA60/Go610 x2", "p": 134.64}, {"t": "VINTRONS AHA1111107 P6", "p": 227.33}]},
+    {"sku": "CS-ABM600SL", "our": 30.99, "key": "Lenovo ServeRaid-8s 39R8812", "relevant": [{"t": "VINTRONS ServeRaid-8s 39R8812", "p": 256.58}]},
+    {"sku": "CS-SFM3SL", "our": 19.99, "key": "i-Audio X5", "relevant": [{"t": "VINTRONS i-Audio M5/X5", "p": 205.21}, {"t": "VINTRONS iAudio X5", "p": 174.48}]},
+    {"sku": "CS-DEW528PX", "our": 62.99, "key": "DeWalt DC528", "relevant": [{"t": "VINTRONS DC528/DC551KA", "p": 740.25}, {"t": "VINTRONS DC528N", "p": 888.3}]},
+    {"sku": "CS-EMC150LS", "our": 27.99, "key": "Saft 0120894-A", "relevant": [{"t": "VINTRONS Saft 0120894-A", "p": 307.23}, {"t": "Dual-Lite 应急灯 2pack", "p": 235.17}]},
+    {"sku": "CS-KOH300MD", "our": 27.99, "key": "IKO3 HeartMirror ECG", "relevant": [], "note": "0 结果，亚马逊空白"},
+    {"sku": "CS-FVA034MD", "our": 28.99, "key": "Fresenius Volumat Agilia", "relevant": [{"t": "HOSPIRA 泵电池(弱相关)", "p": 1174.67}]},
+    {"sku": "CS-ECR131VX", "our": 27.99, "key": "Ilife A4S", "relevant": [{"t": "VINTRONS", "p": 362.83}, {"t": "18650 pack 14.8V", "p": 564.6}]},
+    {"sku": "CS-P303CL", "our": 18.99, "key": "Radio Shack 431021", "relevant": [{"t": "VINTRONS 23197/431021", "p": 227.33}, {"t": "VI VINTRONS 43-1051 系列", "p": 158.17}]},
+    {"sku": "CS-RMA150MD", "our": 82.99, "key": "ResMed Astral 150", "relevant": [], "note": "唯一结果=Cameron Sino 9000mAh 无标价"},
+    {"sku": "CS-WGF300VX", "our": 21.99, "key": "Mannesmann M17480", "relevant": [{"t": "Brüder Mannesmann M17691(近似)", "p": 643.01}]},
+    {"sku": "CS-BS3300PX", "our": 62.99, "key": "Ramset SBD12", "relevant": [{"t": "VINTRONS Ramset CSD12C/PTUB17/SBD12", "p": 749.5}]}
+  ]
+}

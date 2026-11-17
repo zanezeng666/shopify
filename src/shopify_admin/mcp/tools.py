@@ -13,6 +13,7 @@ from shopify_admin.mcp.permission import Permission, require
 from shopify_admin.services.finance.service import FinanceService
 from shopify_admin.services.fulfillment.service import FulfillmentService
 from shopify_admin.services.inventory.service import InventoryService
+from shopify_admin.services.marketing.google_ads import GoogleAdsService
 from shopify_admin.services.marketing.service import MarketingService
 from shopify_admin.services.orders.service import OrderService
 from shopify_admin.services.products.service import ProductService
@@ -28,6 +29,7 @@ _fulfillment = FulfillmentService()
 _finance = FinanceService()
 _reports = ReportService()
 _marketing = MarketingService()
+_ads = GoogleAdsService()
 
 
 def _guard(fn, *args, **kwargs):
@@ -435,6 +437,35 @@ def shopify_google_field_upsert(
 
 
 # ======================================================================
+# Google Ads
+# ======================================================================
+def shopify_ads_verify() -> dict:
+    """Google Ads 凭据连通验证（列出可访问的广告账户）。"""
+    return _guard(_ads.verify_connection)
+
+
+def shopify_ads_customer_info(customer_id: str | None = None) -> dict:
+    """广告账户基础信息（名称/货币/时区）。"""
+    return _guard(_ads.get_customer_info, customer_id)
+
+
+def shopify_ads_campaigns(customer_id: str | None = None) -> dict:
+    """广告系列列表（预算 + 全时段核心指标）。"""
+    return _guard(lambda: {"items": _ads.list_campaigns(customer_id)})
+
+
+def shopify_ads_conversions_pending(store_id: int | None = None, limit: int = 200) -> dict:
+    """待回传转化订单（已支付 + 有 gclid + 未回传 Google Ads）。"""
+    return _guard(_ads.pending_conversions, store_id, limit=limit)
+
+
+@require(Permission.GENERAL)
+def shopify_ads_conversions_upload(store_id: int | None = None, limit: int = 200) -> dict:
+    """触发转化回传（gclid -> Google Ads，成功标记幂等）。"""
+    return _guard(_ads.upload_pending_conversions, store_id, limit=limit)
+
+
+# ======================================================================
 # 工具注册表（mcp_server 聚合用）
 # ======================================================================
 ALL_TOOLS = [
@@ -455,4 +486,6 @@ ALL_TOOLS = [
     shopify_report_sales, shopify_report_order_status, shopify_report_inventory,
     shopify_gmc_feeds, shopify_google_fields_list, shopify_gmc_generate,
     shopify_google_field_upsert,
+    shopify_ads_verify, shopify_ads_customer_info, shopify_ads_campaigns,
+    shopify_ads_conversions_pending, shopify_ads_conversions_upload,
 ]

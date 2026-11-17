@@ -1,0 +1,13 @@
+{
+ "id": 168219214068,
+ "title": "Battery Finder",
+ "shop_id": 5953192036,
+ "handle": "battery-search",
+ "body_html": "<p>Search 8,700+ replacement battery models by device, OEM part number or specification. Full electrical and mechanical data sheets, OEM cross-reference, and bulk-quote support for every model.</p>",
+ "author": "Shopify API",
+ "created_at": "2026-11-12T16:24:42-12:00",
+ "updated_at": "2026-11-12T16:24:42-12:00",
+ "published_at": "2026-11-12T16:24:42-12:00",
+ "template_suffix": "battery-search",
+ "admin_graphql_api_id": "gid://shopify/Page/168219214068"
+}

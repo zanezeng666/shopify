@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "estry-wholesale",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

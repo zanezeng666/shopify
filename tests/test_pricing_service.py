@@ -491,3 +491,48 @@ def test_delist_stopped_dry_run(monkeypatch):
                                         dry_run=True)
     assert r["to_delist"] == 1
     assert r["items"][0]["shopify_product_id"] == 501
+
+
+# ----------------------------------------------------------------------
+# load_stopped：记录级停售语义（部分品牌在售 ≠ 停售，2026-11-12 修正）
+# ----------------------------------------------------------------------
+def test_load_stopped_requires_all_records_dead(monkeypatch):
+    import shopify_admin.services.pricing.service as pmod
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.pool import StaticPool
+
+    # StaticPool: 所有 connect() 共享同一底层连接，:memory: 数据才可见
+    eng = create_engine("sqlite://", poolclass=StaticPool,
+                        connect_args={"check_same_thread": False})
+    with eng.connect() as c:
+        c.execute(text("CREATE TABLE cs_product (cs_id TEXT, status INT)"))
+        c.execute(text(
+            "CREATE TABLE cs_product_record (id INT, cs_id TEXT, status TEXT)"))
+        # CS-MIX: 一条在售+一条停售 → 不算停售（旧 s1 会整体误判）
+        c.execute(text("INSERT INTO cs_product VALUES ('CS-MIX',1),('CS-MIX',0)"))
+        # CS-DEAD: 全部记录停售 → 停售
+        c.execute(text("INSERT INTO cs_product VALUES ('CS-DEAD',0),('CS-DEAD',0)"))
+        # CS-S2: cs_product 在售但 record 最新为 Stop Production → 停售
+        c.execute(text("INSERT INTO cs_product VALUES ('CS-S2',1)"))
+        c.execute(text("INSERT INTO cs_product_record VALUES "
+                       "(1,'CS-S2','Normal'),(2,'CS-S2','Stop Production')"))
+        # CS-LIVE: 正常在售 → 不停售
+        c.execute(text("INSERT INTO cs_product VALUES ('CS-LIVE',1)"))
+        c.execute(text("INSERT INTO cs_product_record VALUES "
+                       "(3,'CS-LIVE','Normal')"))
+        c.commit()
+
+    class _Ctx:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def connect(self):
+            return eng.connect()
+
+    monkeypatch.setattr(pmod, "get_cs_engine", lambda: _Ctx())
+    stopped = PricingService().load_stopped()
+    assert stopped == {"CS-DEAD", "CS-S2"}
+    assert "CS-MIX" not in stopped   # 部分品牌在售 ≠ 停售（防 delist_stopped 误杀回潮）

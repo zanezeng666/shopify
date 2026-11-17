@@ -8,7 +8,8 @@ from shopify_admin.services.products.sync_shopify import CsShopifySyncService
 
 
 def _cs_row(cs_id, brand, *, retail=None, bar="", gross=0, net=0,
-            fit="", pno="", status=1, category="Mobile, SmartPhone"):
+            fit="", pno="", status=1, category="Tablet"):
+    # 默认类目=Tablet(码69)：Mobile/SmartPhone 已进品类收缩黑名单不再建品
     return {
         "cs_id": cs_id, "brand": brand, "part_no": pno, "fit_model": fit,
         "capacity": "", "voltage": "", "battery_type": "", "dimension": "",
@@ -138,16 +139,45 @@ def test_payload_matches_store_format(monkeypatch):
     p = CsShopifySyncService().build_new_product_payload(row)
     assert p["title"] == "Battery for DBrand D1 D2 DP1"
     assert p["handle"] == "battery-for-dbrand-d1-d2-dp1"
-    assert p["vendor"] == "Bomibattery"           # 店铺统一自有品牌（存量实证）
+    assert p["vendor"] == "Estry"                  # 店铺自有品牌（2026-11-03 切换）
     v = p["variants"][0]
-    assert v["sku"] == "CS-DD_DBrand_47_0"        # 存量 4 段格式，N=类目码 47(Mobile/SmartPhone)
+    assert v["sku"] == "CS-DD_DBrand_69_0"        # 存量 4 段格式，N=类目码 69(Tablet)
     assert v["price"] == "12.50" and v["barcode"] == "6900004" and v["grams"] == 120
     assert v["inventory_management"] == "shopify"
-    # body 复刻存量模板三段列表
-    for frag in ("Compatible Brand", "Compatible Model", "Compatible Battery Part Number",
-                 "<li><b>DBrand</b></li>", "<li><b>D1</b></li>", "<li><b>DP1</b></li>",
-                 "Tips Before Purchase"):
+    # v2.2（2026-11-05 DeepSeek 审查落地）：选项显式命名 / 独立 SEO 描述 / 绿线退役
+    assert p["options"] == [{"name": "Capacity"}]
+    mf = p["metafields"][0]
+    assert (mf["namespace"], mf["key"]) == ("seo", "description")
+    assert mf["value"].startswith("This is a") and len(mf["value"]) <= 155
+    assert "#00A651" not in p["body_html"]
+    # body v2.2：兼容三节合并为单 Compatibility 区（行内标签 + 列表）
+    for frag in ("Compatibility</h3>", "Compatible Brand:</b> DBrand",
+                 "Compatible Model:", "Compatible Battery Part Number:",
+                 "<li><b>D1</b></li>", "<li><b>DP1</b></li>"):
         assert frag in p["body_html"]
+    # Tips 段已并入 FAQ 首条（2026-11-03），不再单独出现
+    assert "Tips Before Purchase" not in p["body_html"]
+
+
+def test_payload_empty_fit_pno_sections_omitted(monkeypatch):
+    """fit_model/part_no 为空时对应组省略；逗号多值 → 多行加粗（v2.2 合并区）。
+
+    断言锚定行内标签（</b>）——FAQ 文案含 "Compatible Model" 引导词，
+    裸字样断言会误伤。"""
+    _install(monkeypatch)
+    # 两者全空：两组都省略，Brand 行内保留
+    row = _cs_row("CS-NOFIT", "Acme", retail="9.90")
+    body = CsShopifySyncService().build_new_product_payload(row)["body_html"]
+    assert "Compatible Model:" not in body
+    assert "Compatible Battery Part Number:" not in body
+    assert "Compatible Brand:</b> Acme" in body
+    # 定义句退化：规格/型号/件号全空 → 极简实体句仍输出（AI 摘要保底）
+    assert "This is a replacement battery for Acme devices." in body
+    # 有型号无件号：Model 组在（多行加粗），Part Number 组省略
+    row2 = _cs_row("CS-NOFIT2", "Acme", retail="9.90", fit="M1, M2")
+    body2 = CsShopifySyncService().build_new_product_payload(row2)["body_html"]
+    assert "<li><b>M1</b></li>" in body2 and "<li><b>M2</b></li>" in body2
+    assert "Compatible Battery Part Number:" not in body2
 
 
 def test_payload_multibrand_split_and_slug(monkeypatch):
@@ -166,7 +196,7 @@ def test_payload_fallback_without_fit(monkeypatch):
     p = CsShopifySyncService().build_new_product_payload(row)
     assert p["title"] == "Battery for EBrand"     # 无 fit/part → 品牌兜底
     assert p["handle"] == "battery-for-ebrand"
-    assert p["variants"][0]["sku"] == "CS-EE_EBrand_47_0"
+    assert p["variants"][0]["sku"] == "CS-EE_EBrand_69_0"
 
 
 # ----------------------------------------------------------------------
@@ -353,6 +383,22 @@ def test_battery_scope_filters_create(monkeypatch):
         ("CS-SD1", "Screwdriver")}
 
 
+def test_excluded_categories_block_create(monkeypatch):
+    """品类收缩黑名单（2026-11-12）：手机/相机/笔记本三类在售记录不建新品。"""
+    cat = {
+        ("CS-MB1", "mb"): _cs_row("CS-MB1", "Mb", category="Mobile, SmartPhone"),
+        ("CS-CAM1", "cam"): _cs_row("CS-CAM1", "Cam", category="Camera"),
+        ("CS-NB1", "nb"): _cs_row("CS-NB1", "Nb", category="Notebook, Laptop"),
+        ("CS-OK1", "ok"): _cs_row("CS-OK1", "Ok", category="Tablet"),
+    }
+    monkeypatch.setattr(sync_mod, "session_scope", lambda: _FakeSession())
+    monkeypatch.setattr(sync_mod.CsShopifySyncService, "load_cs_catalog",
+                        staticmethod(lambda: {k: dict(v) for k, v in cat.items()}))
+    p = CsShopifySyncService().diff(1)["plan"]
+    skus = [i["sku"] for i in p["to_create"]["items"]]
+    assert p["to_create"]["count"] == 1 and skus == ["CS-OK1_Ok_69_0"]
+
+
 def test_apply_only_cs_id_single_point(monkeypatch):
     """only_cs_id：只创建目标 cs_id 的产品、跳过存量 update。"""
     _install(monkeypatch)
@@ -385,7 +431,7 @@ def test_apply_only_cs_id_single_point(monkeypatch):
     r = svc.apply(1, dry_run=False, only_cs_id="CS-DD")
     assert r["only_cs_id"] == "CS-DD"
     assert r["created"] == 1 and len(rest.created) == 1
-    assert rest.created[0]["variants"][0]["sku"] == "CS-DD_DBrand_47_0"
+    assert rest.created[0]["variants"][0]["sku"] == "CS-DD_DBrand_69_0"
     assert r["updated"] == 0                          # 单点模式不动存量
 
 
@@ -404,21 +450,58 @@ _SPEC_ROW = {
 
 def test_body_html_matches_legacy_webpage_template():
     body = CsShopifySyncService._build_body_html(_SPEC_ROW)
-    # 页首规格段逐字锚点（与老品 7122951831719 body_html 一致）
-    assert body.startswith("Battery Specifications <br> <br>")
+    # v2 规格值口径不变（样式无关断言：值出现在单元格中）
     for anchor in (
-        '<td style="text-align: left;" class="detail-tit">Li-ion</td>',
-        '<td class="detail-val">270.0g</td>',                    # 270 → 270.0g
-        '<td class="detail-val">69.4*37.0*37.0mm</td>',          # 去尾零 * 连接
-        '<td class="detail-tit">Vacuum</td>',
-        '<td class="detail-val">14.4V</td>',
-        '<td class="detail-val">37.44Wh</td>',                   # wh 缺失→容量×电压推导
-        "Battery Specifications", "Tips Before Purchase",
-        "<li><b>PT-SX-2000L</b></li>",                           # part_no 列表
+        ">Li-ion<", ">270.0g<", ">69.4*37.0*37.0mm<",          # 270→270.0g、去尾零
+        ">Vacuum<", ">14.4V<", ">37.44Wh<",                    # wh 缺失→容量×电压推导
+        "Battery Specifications",
+        "<li><b>PT-SX-2000L</b></li>",                         # part_no 列表
     ):
         assert anchor in body
+    # Tips 段已并入 FAQ 首条（2026-11-03），不再单独出现
+    assert "Tips Before Purchase" not in body
     # 老模板不含供应商介绍段
     assert "professional battery supplier" not in body
+
+
+def test_body_html_v2_trust_sections():
+    """v2 分区：徽章条在页首，安全/卖点/FAQ 齐全（2026-11-03）。
+
+    认证口径（2026-11-03 核实）：UN38.3（运输强制测试）、ISO9001（工厂
+    质量体系）真实持有可宣称；CE/RoHS 未做过不得出现（FTC 风险）。"""
+    body = CsShopifySyncService._build_body_html(_SPEC_ROW)
+    # 信任徽章条位于页首（先于规格表）
+    assert body.index("12-Month Warranty") < body.index("Battery Specifications")
+    assert "30-Day Easy Returns" in body
+    assert "UN38.3 &amp; ISO9001 Certified" in body
+    for frag in ("Safety Warnings", "Why Choose Estry", "<details", "FAQ",
+                 "UN38.3 tested for safe transport. MSDS available upon request.",
+                 "ISO9001 certified facility"):
+        assert frag in body
+    # FAQ 为折叠块且含保修政策文案
+    assert "<summary" in body and "12-month warranty" in body
+    # 定义句（AI 摘要最小可引用单元，2026-11-03）：一句含全部关键实体
+    assert ("This is a 2600mAh 14.4V Li-ion replacement battery "
+            "for Amarey A800, A900,") in body
+    assert "compatible with battery part numbers PT-SX-2000L." in body
+    # 未做过的认证绝不出现（FTC 虚假宣称风险）
+    for banned in ("CE", "RoHS"):
+        assert banned not in body
+
+
+def test_body_html_many_models_two_columns():
+    """型号超 10 个 → 自适应多列；少则单列（v2.1：column-width 自适应
+    桌面 2 列/移动 1 列，替代固定 column-count:2 在窄屏的频繁断行）。"""
+    row = dict(_SPEC_ROW, fit_model=",".join(f"M{i}" for i in range(12)))
+    assert "column-width:170px" in CsShopifySyncService._build_body_html(row)
+    assert "column-width:170px" not in CsShopifySyncService._build_body_html(_SPEC_ROW)
+
+
+def test_body_html_dedup_repeated_models():
+    """源数据重复型号去重保序（coredy 实证 R500 重复）。"""
+    row = dict(_SPEC_ROW, fit_model="A1,A1,A2")
+    body = CsShopifySyncService._build_body_html(row)
+    assert body.count("<li><b>A1</b></li>") == 1
 
 
 def test_spec_tables_skip_empty_rows_and_degenerate():
@@ -431,8 +514,7 @@ def test_spec_tables_skip_empty_rows_and_degenerate():
 
 def test_spec_rate_prefers_source_wh():
     row = dict(_SPEC_ROW, wh_value=Decimal("40.32"))
-    assert '<td class="detail-val">40.32Wh</td>' in \
-        CsShopifySyncService._spec_tables_html(row)
+    assert ">40.32Wh<" in CsShopifySyncService._spec_tables_html(row)
 
 
 def test_variant_option1_is_capacity():

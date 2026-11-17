@@ -1,0 +1,325 @@
+{% comment %} estry-battery-search-v1: pro spec search {% endcomment %}
+<section class="ebs" id="ebs-root" role="region" aria-label="Battery specification search">
+  <div class="ebs-hero">
+    <div class="page-width">
+      <p class="ebs-hero__kicker">{{ section.settings.kicker | escape }}</p>
+      <h1 class="ebs-hero__title">{{ section.settings.heading | escape }}</h1>
+      <div class="ebs-searchbox">
+        <input id="ebs-q" class="ebs-searchbox__input" type="search"
+               placeholder="{{ section.settings.placeholder | escape }}"
+               autocomplete="off" aria-label="Search battery specifications">
+        <button id="ebs-go" class="ebs-searchbox__btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+          <span>{{ section.settings.button_label | escape }}</span>
+        </button>
+      </div>
+      <div class="ebs-hints">
+        <span class="ebs-hints__label">{{ section.settings.hint_label | escape }}</span>
+        {%- for block in section.blocks -%}
+          {%- if block.settings.term != blank -%}
+            <button class="ebs-hint" type="button" data-term="{{ block.settings.term | escape }}" {{ block.shopify_attributes }}>{{ block.settings.term | escape }}</button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="ebs-body page-width">
+    <aside class="ebs-facets" id="ebs-facets" aria-label="Filters"></aside>
+    <div class="ebs-main">
+      <div class="ebs-toolbar">
+        <div class="ebs-toolbar__left">
+          <span class="ebs-count" id="ebs-count">Loading database&hellip;</span>
+          <span class="ebs-pills" id="ebs-pills"></span>
+        </div>
+        <div class="ebs-toolbar__right">
+          <label class="ebs-sort-label" for="ebs-sort">Sort</label>
+          <select id="ebs-sort" class="ebs-sort">
+            <option value="rel">Best match</option>
+            <option value="az">Model A-Z</option>
+            <option value="pa">Price low-high</option>
+            <option value="pd">Price high-low</option>
+          </select>
+        </div>
+      </div>
+      <div class="ebs-tablewrap" id="ebs-tablewrap">
+        <table class="ebs-table" id="ebs-table"></table>
+      </div>
+      <div class="ebs-pager" id="ebs-pager"></div>
+    </div>
+  </div>
+
+  <div class="ebs-cta">
+    <div class="page-width ebs-cta__in">
+      <div>
+        <div class="ebs-cta__t">Can't find a model? Need bulk pricing?</div>
+        <div class="ebs-cta__s">Send us your part list &mdash; quotes within 24 hours, MOQ-friendly.</div>
+        <div class="ebs-cta__tier">Volume discounts: <b>10+ &minus;5%</b> &middot; <b>20+ &minus;6%</b> &middot; <b>50+ &minus;8%</b> &middot; <b>100+ &minus;10%</b> &mdash; automatic at checkout</div>
+      </div>
+      <a class="ebs-cta__btn" href="/pages/wholesale">Request Bulk Quote</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ebs{--navy:#1B2A41;--green:#00A651;--green-d:#008A43;--line:#D9E2EC;--line2:#E5EBF1;--mut:#5A6B7F;--bg:#F4F6F8;}
+  .ebs-hero{background:linear-gradient(135deg,#1B2A41 0%,#243a57 55%,#16233a 100%);padding:44px 0 36px;color:#fff;}
+  .ebs-hero__kicker{margin:0 0 6px;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:#9fd8b8;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .ebs-hero__title{margin:0 0 20px;font-size:clamp(2.4rem,4vw,3.4rem);line-height:1.12;color:#fff;font-family:var(--font-heading-family);font-weight:var(--font-heading-weight);}
+  .ebs-searchbox{display:flex;gap:10px;max-width:820px;}
+  .ebs-searchbox__input{flex:1;height:56px;border:none;border-radius:10px;padding:0 18px;font-size:1.6rem;color:#1B2A41;background:#fff;outline:none;min-width:0;}
+  .ebs-searchbox__input:focus{box-shadow:0 0 0 3px rgba(0,166,81,.45);}
+  .ebs-searchbox__btn{flex:0 0 auto;height:56px;padding:0 24px;border:none;border-radius:10px;background:#00A651;color:#fff;font-size:1.6rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s;}
+  .ebs-searchbox__btn svg{width:19px;height:19px;}
+  .ebs-searchbox__btn:hover{background:#008a43;}
+  .ebs-hints{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .ebs-hints__label{font-size:1.2rem;color:#8fa2ba;margin-right:2px;}
+  .ebs-hint{padding:5px 13px;border-radius:999px;background:rgba(255,255,255,.08);color:#dbe5f0;font-size:1.25rem;border:1px solid rgba(255,255,255,.16);cursor:pointer;transition:all .15s;}
+  .ebs-hint:hover{background:#00A651;border-color:#00A651;color:#fff;}
+  .ebs-body{display:grid;grid-template-columns:250px 1fr;gap:22px;padding-top:24px;padding-bottom:40px;align-items:start;}
+  .ebs-facets{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 14px 14px;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto;}
+  .ebs-fgroup{border-bottom:1px solid var(--line2);padding:10px 0;}
+  .ebs-fgroup:last-child{border-bottom:none;}
+  .ebs-fgroup__t{display:flex;justify-content:space-between;align-items:center;font-size:1.3rem;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;padding:2px 0;user-select:none;}
+  .ebs-fgroup__t::after{content:"\2212";color:var(--mut);font-size:1.5rem;line-height:1;}
+  .ebs-fgroup.closed .ebs-fgroup__t::after{content:"+";}
+  .ebs-fgroup.closed .ebs-fopts{display:none;}
+  .ebs-fopts{display:flex;flex-direction:column;gap:2px;margin-top:6px;}
+  .ebs-fopt{display:flex;align-items:center;gap:8px;padding:3px 2px;font-size:1.35rem;color:#2A3B4F;cursor:pointer;border-radius:5px;}
+  .ebs-fopt:hover{background:var(--bg);}
+  .ebs-fopt input{accent-color:var(--green);width:15px;height:15px;flex:0 0 auto;}
+  .ebs-fopt .n{margin-left:auto;font-size:1.15rem;color:var(--mut);background:var(--bg);border-radius:9px;padding:0 7px;}
+  .ebs-more{background:none;border:none;color:var(--green-d);font-size:1.25rem;cursor:pointer;padding:4px 2px;text-align:left;}
+  .ebs-more:hover{text-decoration:underline;}
+  .ebs-main{min-width:0;}
+  .ebs-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .ebs-count{font-size:1.4rem;font-weight:700;color:var(--navy);}
+  .ebs-pills{display:inline-flex;gap:6px;margin-left:8px;flex-wrap:wrap;}
+  .ebs-pill{background:#e7f5ed;color:#008A43;border-radius:999px;padding:2px 10px;font-size:1.2rem;cursor:pointer;border:1px solid #bfe5cf;}
+  .ebs-pill:hover{background:#d4eedf;}
+  .ebs-toolbar__right{display:flex;align-items:center;gap:7px;}
+  .ebs-sort-label{font-size:1.3rem;color:var(--mut);}
+  .ebs-sort{height:34px;border:1px solid var(--line);border-radius:7px;background:#fff;font-size:1.35rem;color:#2A3B4F;padding:0 8px;}
+  .ebs-tablewrap{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:calc(100vh - 84px);}
+  .ebs-table{width:100%;border-collapse:collapse;font-size:1.32rem;color:#2A3B4F;min-width:880px;}
+  .ebs-table th{position:sticky;top:0;background:#1B2A41;color:#fff;text-align:left;padding:9px 12px;font-size:1.22rem;letter-spacing:.07em;text-transform:uppercase;font-weight:600;white-space:nowrap;z-index:2;}
+  .ebs-table td{padding:8px 12px;border-bottom:1px solid var(--line2);vertical-align:top;}
+  .ebs-table tbody tr:nth-child(even){background:#F8FAFC;}
+  .ebs-table tbody tr:hover{background:#eef7f1;}
+  .ebs-table tbody tr[data-h]{cursor:pointer;}
+  .ebs-model{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.25rem;color:var(--navy);font-weight:600;white-space:nowrap;}
+  .ebs-model a{color:var(--green-d);text-decoration:underline;text-decoration-color:rgba(0,138,67,.35);text-underline-offset:3px;}
+  .ebs-model a:hover{text-decoration-color:var(--green-d);}
+  .ebs-fits{max-width:330px;}
+  .ebs-fits b{font-weight:600;color:var(--navy);}
+  .ebs-mut{color:var(--mut);}
+  .ebs-oem{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.18rem;color:var(--mut);}
+  .ebs-price{font-weight:700;color:var(--navy);white-space:nowrap;}
+  .ebs-act{white-space:nowrap;}
+  .ebs-btn{display:inline-block;padding:5px 11px;border-radius:7px;font-size:1.25rem;font-weight:600;text-decoration:none;transition:all .15s;}
+  .ebs-btn--spec{border:1.5px solid var(--green-d);color:var(--green-d);}
+  .ebs-btn--spec:hover{background:var(--green-d);color:#fff;}
+  .ebs-btn--buy{border:1.5px solid var(--navy);color:var(--navy);margin-left:5px;}
+  .ebs-btn--buy:hover{background:var(--navy);color:#fff;}
+  .ebs-empty{padding:60px 20px;text-align:center;color:var(--mut);font-size:1.5rem;}
+  .ebs-empty b{color:var(--navy);}
+  .ebs-pager{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+  .ebs-pg{min-width:34px;height:34px;border:1px solid var(--line);border-radius:7px;background:#fff;color:#2A3B4F;font-size:1.3rem;cursor:pointer;}
+  .ebs-pg.cur{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .ebs-pg:disabled{opacity:.4;cursor:default;}
+  .ebs-cta{background:linear-gradient(90deg,#123458 0%,#1B2A41 100%);padding:26px 0;margin-top:10px;}
+  .ebs-cta__in{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;color:#fff;}
+  .ebs-cta__t{font-size:1.9rem;font-weight:700;font-family:var(--font-heading-family);}
+  .ebs-cta__s{font-size:1.35rem;color:#9fb2ca;margin-top:3px;}
+  .ebs-cta__tier{font-size:1.25rem;color:#cfe3d7;margin-top:6px;}
+  .ebs-cta__tier b{color:#7fd8a2;font-weight:700;}
+  .ebs-cta__btn{background:#00A651;color:#fff;font-size:1.5rem;font-weight:700;padding:12px 26px;border-radius:9px;text-decoration:none;transition:background .15s;white-space:nowrap;}
+  .ebs-cta__btn:hover{background:#008a43;}
+  .ebs-togglex{display:none;}
+  @media (max-width:989px){
+    .ebs-body{grid-template-columns:1fr;}
+    .ebs-facets{position:static;max-height:none;}
+    .ebs-togglex{display:block;width:100%;height:44px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:1.4rem;font-weight:600;color:var(--navy);cursor:pointer;margin-bottom:12px;}
+    .ebs-facets.hid{display:none;}
+    .ebs-hero{padding:32px 0 28px;}
+  }
+  @media (max-width:749px){
+    .ebs-tablewrap{overflow:visible;border:none;background:transparent;max-height:none;}
+    .ebs-table{display:block;min-width:0;}
+    .ebs-table thead{display:none;}
+    .ebs-table tbody{display:block;}
+    .ebs-table tbody tr{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;margin:0 0 12px;padding:4px 0;}
+    .ebs-table tbody tr:nth-child(even){background:#fff;}
+    .ebs-table tbody tr:hover{background:#fff;}
+    .ebs-table td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;border-bottom:1px dashed var(--line2);padding:8px 14px;}
+    .ebs-table td::before{content:attr(data-label);font-weight:600;color:var(--mut);font-size:1.15rem;letter-spacing:.04em;white-space:nowrap;flex:0 0 auto;}
+    .ebs-table td:last-child{border-bottom:none;justify-content:flex-end;padding-top:10px;}
+    .ebs-table td:last-child::before{content:"";}
+    .ebs-model{white-space:normal;word-break:break-all;text-align:right;}
+    .ebs-fits{max-width:62%;text-align:right;}
+    .ebs-fits b{word-break:break-word;}
+    .ebs-oem{max-width:62%;overflow:visible;white-space:normal;word-break:break-all;text-align:right;}
+    .ebs-cta__btn{width:100%;text-align:center;}
+  }
+</style>
+
+<script>
+(function(){
+  var MANIFEST_URL = {{ 'spec-idx-manifest.json' | asset_url | json }};
+  var SHARD_BASE = MANIFEST_URL.replace(/[^\/]*$/, '');
+  var SPEC_PAGE = '/pages/specification';
+  var PAGE_SIZE = 50;
+  var $q = document.getElementById('ebs-q');
+  var facetsEl = document.getElementById('ebs-facets');
+  var countEl = document.getElementById('ebs-count');
+  var pillsEl = document.getElementById('ebs-pills');
+  var tableEl = document.getElementById('ebs-table');
+  var pagerEl = document.getElementById('ebs-pager');
+  var sortEl = document.getElementById('ebs-sort');
+  var items = [], facets = null, shown = [], page = 1;
+  var st = {q:'', cat:{}, br:{}, ch:{}, v:{}, cap:{}};
+  tableEl.addEventListener('click', function(ev){
+    if(ev.target.closest('a,button,label,input,select,textarea'))return;
+    var tr=ev.target.closest('tr[data-h]');
+    if(tr)window.location.href=tr.getAttribute('data-h');
+  });
+  var FCOLS = [['cat','Category','category'],['br','Device Brand','brand'],['ch','Chemistry','chemistry'],['v','Voltage','voltage'],['cap','Capacity','capRange']];
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(ch){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
+  function capNum(s){var m=/[\d.]+/.exec(s||'');return m?parseFloat(m[0]):null;}
+  function haystack(it){return (it.m+' '+it.t+' '+it.b+' '+it.c+' '+it.ch+' '+it.v+' '+(it.fm||[]).join(' ')+' '+(it.pn||[]).join(' ')).toLowerCase();}
+  function match(it){
+    if(st.q){
+      var h=haystack(it), ws=st.q.toLowerCase().split(/\s+/).filter(Boolean);
+      for(var i=0;i<ws.length;i++){if(h.indexOf(ws[i])===-1)return false;}
+    }
+    var ok=function(sel,val){var ks=Object.keys(sel);if(!ks.length)return true;return sel[val]===1;};
+    if(!ok(st.cat,it.c)||!ok(st.br,it.b)||!ok(st.ch,it.ch)||!ok(st.v,it.v))return false;
+    var ck=Object.keys(st.cap);
+    if(ck.length){var cn=capNum(it.cap),hit=false;
+      for(var j=0;j<ck.length;j++){var r=st.cap[ck[j]];if(cn!==null&&cn>=r[0]&&cn<r[1]){hit=true;break;}}
+      if(!hit)return false;}
+    return true;
+  }
+  function score(it){
+    if(!st.q)return 0;
+    var q=st.q.toLowerCase(), ml=it.m.toLowerCase();
+    if(ml===q)return 100;
+    if(ml.indexOf(q)===0)return 80;
+    if(ml.indexOf(q)>-1)return 60;
+    if((it.t||'').toLowerCase().indexOf(q)>-1)return 40;
+    return 10;
+  }
+  function apply(){
+    shown=items.filter(match);
+    var s=sortEl.value;
+    if(s==='az')shown.sort(function(a,b){return a.m<b.m?-1:a.m>b.m?1:0;});
+    else if(s==='pa')shown.sort(function(a,b){return (a.p||1e9)-(b.p||1e9);});
+    else if(s==='pd')shown.sort(function(a,b){return (b.p||0)-(a.p||0);});
+    else shown.sort(function(a,b){return score(b)-score(a)||(a.t<b.t?-1:a.t>b.t?1:0);});
+    page=1; render(); syncUrl();
+  }
+  function render(){
+    countEl.textContent=shown.length.toLocaleString()+' of '+items.length.toLocaleString()+' models';
+    pillsEl.innerHTML='';
+    var mk=function(label,key,val){var b=document.createElement('button');b.className='ebs-pill';b.textContent=label+' \u00d7';
+      b.onclick=function(){delete st[key][val];apply();buildFacets();};pillsEl.appendChild(b);};
+    Object.keys(st.cat).forEach(function(k){mk(k,'cat',k);});
+    Object.keys(st.br).forEach(function(k){mk(k,'br',k);});
+    Object.keys(st.ch).forEach(function(k){mk(k,'ch',k);});
+    Object.keys(st.v).forEach(function(k){mk(k,'v',k);});
+    Object.keys(st.cap).forEach(function(k){mk(k,'cap',k);});
+    var pages=Math.max(1,Math.ceil(shown.length/PAGE_SIZE));
+    if(page>pages)page=pages;
+    var start=(page-1)*PAGE_SIZE, rows=shown.slice(start,start+PAGE_SIZE);
+    var h='<thead><tr><th>Model No.</th><th>Fits Device</th><th>Capacity</th><th>Voltage</th><th>Energy</th><th>Chemistry</th><th>OEM Part No.</th><th>Price</th><th></th></tr></thead><tbody>';
+    for(var i=0;i<rows.length;i++){
+      var it=rows[i];
+      var href = it.h ? '/products/'+esc(it.h) : SPEC_PAGE+'?m='+encodeURIComponent(it.m);
+      var fits='<b>'+esc(it.t)+'</b>';
+      if((it.fm||[]).length)fits+='<div class="ebs-mut">'+esc(it.fm.slice(0,3).join(', '))+(it.fm.length>3?'\u2026':'')+'</div>';
+      h+='<tr data-h="'+href+'"><td class="ebs-model" data-label="Model"><a href="'+href+'">'+esc(it.m)+'</a></td><td class="ebs-fits" data-label="Fits">'+fits+'</td><td data-label="Capacity">'+esc(it.cap||'\u2014')+'</td><td data-label="Voltage">'+esc(it.v||'\u2014')+'</td><td data-label="Energy">'+(it.wh?it.wh+'Wh':'\u2014')+'</td><td data-label="Chemistry">'+esc(it.ch||'\u2014')+'</td><td class="ebs-oem" data-label="OEM Part No." title="'+esc((it.pn||[]).join(', '))+'">'+esc((it.pn||[]).join(', ')||'\u2014')+'</td><td class="ebs-price" data-label="Price">'+(it.p!=null?'$'+it.p.toFixed(2):'\u2014')+'</td><td class="ebs-act">'+(it.h?'<a class="ebs-btn ebs-btn--spec" href="'+SPEC_PAGE+'?m='+encodeURIComponent(it.m)+'">Specs</a><a class="ebs-btn ebs-btn--buy" href="/products/'+esc(it.h)+'" target="_blank" rel="noopener">Buy</a>':'<a class="ebs-btn ebs-btn--spec" href="'+SPEC_PAGE+'?m='+encodeURIComponent(it.m)+'">Specs</a>')+'</td></tr>';
+    }
+    if(!rows.length)h+='<tr><td colspan="9"><div class="ebs-empty"><b>No matching models.</b><br>Try fewer filters, or <a href="/pages/wholesale" style="color:#008A43;font-weight:600">send us your part list</a> \u2014 we cover 22,000+ OEM numbers.</div></td></tr>';
+    tableEl.innerHTML=h;
+    var ph='';
+    if(pages>1){
+      ph+='<button class="ebs-pg" data-p="'+(page-1)+'"'+(page===1?' disabled':'')+'>&lsaquo;</button>';
+      for(var p=1;p<=pages;p++){
+        if(pages>9&&p>2&&p<pages-1&&Math.abs(p-page)>1){if(ph.slice(-1)!=='\u2026')ph+='\u2026';continue;}
+        ph+='<button class="ebs-pg'+(p===page?' cur':'')+'" data-p="'+p+'">'+p+'</button>';}
+      ph+='<button class="ebs-pg" data-p="'+(page+1)+'"'+(page===pages?' disabled':'')+'>&rsaquo;</button>';
+    }
+    pagerEl.innerHTML=ph;
+    Array.prototype.forEach.call(pagerEl.querySelectorAll('.ebs-pg'),function(b){
+      b.onclick=function(){var p=parseInt(b.getAttribute('data-p'),10);if(p>=1&&p<=pages){page=p;render();document.getElementById('ebs-tablewrap').scrollIntoView({behavior:'smooth'});}};});
+  }
+  function buildFacets(){
+    var h='<button class="ebs-togglex" id="ebs-tgl" type="button">\u2699 Filters</button>';
+    FCOLS.forEach(function(fc){
+      var key=fc[0], title=fc[1], vals=facets[fc[2]]||[];
+      if(!vals.length)return;
+      h+='<div class="ebs-fgroup"><div class="ebs-fgroup__t" data-g="'+key+'">'+title+'</div><div class="ebs-fopts" id="fo-'+key+'">';
+      vals.forEach(function(vv,i){
+        var label,val,cnt;
+        if(key==='cap'){label=vv[0];val=vv[1]+'-'+vv[2];var hitc=0;
+          items.forEach(function(it){var cn=capNum(it.cap);if(cn!==null&&cn>=vv[1]&&cn<vv[2])hitc++;});
+          if(!hitc)return;cnt=hitc;}
+        else{label=vv[0];val=vv[0];cnt=vv[1];}
+        var lim=(key==='br'||key==='v')?12:20;
+        if(i===lim){h+='<button class="ebs-more" data-more="'+key+'">Show all ('+vals.length+')</button>';}
+        if(i>=lim)return;
+        h+='<label class="ebs-fopt"><input type="checkbox" data-k="'+key+'" data-v="'+esc(val)+'"'+(st[key][val]?' checked':'')+'><span>'+esc(label)+'</span>'+(cnt!==''&&cnt!=null?'<span class="n">'+cnt+'</span>':'')+'</label>';
+      });
+      h+='</div></div>';
+    });
+    facetsEl.innerHTML=h;
+    Array.prototype.forEach.call(facetsEl.querySelectorAll('.ebs-fgroup__t'),function(t){
+      t.onclick=function(){t.parentElement.classList.toggle('closed');};});
+    Array.prototype.forEach.call(facetsEl.querySelectorAll('.ebs-more'),function(m){
+      m.onclick=function(){var box=document.getElementById('fo-'+m.getAttribute('data-more'));
+        Array.prototype.forEach.call(box.querySelectorAll('.ebs-fopt'),function(o){o.style.display='flex';});m.remove();};});
+    Array.prototype.forEach.call(facetsEl.querySelectorAll('input[type=checkbox]'),function(cb){
+      cb.onchange=function(){var k=cb.getAttribute('data-k'),v=cb.getAttribute('data-v');
+        if(cb.checked)st[k][v]=1;else delete st[k][v];apply();};});
+    var tg=document.getElementById('ebs-tgl');
+    if(tg)tg.onclick=function(){facetsEl.classList.toggle('hid');};
+  }
+  function syncUrl(){
+    var u=new URL(window.location);u.searchParams.set('q',st.q);
+    try{window.history.replaceState(null,'',u);}catch(e){}
+  }
+  var tmr=null;
+  $q.addEventListener('input',function(){clearTimeout(tmr);tmr=setTimeout(function(){st.q=$q.value.trim();apply();},160);});
+  $q.addEventListener('keydown',function(e){if(e.key==='Enter'){st.q=$q.value.trim();apply();}});
+  document.getElementById('ebs-go').onclick=function(){st.q=$q.value.trim();apply();};
+  Array.prototype.forEach.call(document.querySelectorAll('.ebs-hint'),function(hb){
+    hb.onclick=function(){var t=hb.getAttribute('data-term');$q.value=t;st.q=t;apply();};});
+  sortEl.onchange=apply;
+  var uq=new URL(window.location).searchParams.get('q')||'';
+  $q.value=uq;st.q=uq;
+  fetch(MANIFEST_URL).then(function(r){return r.json();}).then(function(m){
+    facets=m.facets||{};
+    return Promise.all((m.shards||[]).map(function(s){return fetch(SHARD_BASE+s).then(function(r){return r.json();});}));
+  }).then(function(arr){arr.forEach(function(a){items=items.concat(a);});buildFacets();apply();
+  }).catch(function(e){countEl.textContent='Failed to load index ('+e+')';});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ESTRY Battery Search",
+  "settings": [
+    {"type": "text", "id": "kicker", "label": "Kicker", "default": "OEM Cross-Reference Database"},
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Battery Specification Finder"},
+    {"type": "text", "id": "placeholder", "label": "Search placeholder", "default": "Device model, OEM part number, or battery model (e.g. P1098850, Welch Allyn 72300)"},
+    {"type": "text", "id": "button_label", "label": "Button label", "default": "Search"},
+    {"type": "text", "id": "hint_label", "label": "Hint label", "default": "Try:"}
+  ],
+  "blocks": [
+    {"type": "hint", "name": "Quick term", "settings": [
+      {"type": "text", "id": "term", "label": "Search term"}
+    ]}
+  ],
+  "presets": [{"name": "ESTRY Battery Search"}]
+}
+{% endschema %}

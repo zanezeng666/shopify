@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-10",
+  "method": "Playwright 真实浏览器：amazon.com 搜索同型号电池 -> 过滤(标题含battery+型号token,排除charger/adapter/remote) -> 点进前3个listing详情页 -> 提取BuyBox实价(#corePriceDisplay)",
+  "correction": "修正第一版：搜索卡片显示价严重虚高(VINTRONS卡片$498/$740/$1364 实为划线价或高价规格, 详情页BuyBox实际$63/$174)。本文件为详情页实价",
+  "results": [
+    {"sku": "CS-HIQ200SL", "our": 30.99, "item": "HP iPAQ 210 电池", "amz": [{"t": "Cameron Sino hx2000/hx2100 同款", "p": 398.60, "note": "挂价离谱疑似多支装"}, {"t": "CS iPAQ RX1900 近型号", "p": 17.99}, {"t": "VINTRONS h4100 近型号", "p": 17.36}], "verdict": "近型号贵约70%,同款仅CS离谱挂价"},
+    {"sku": "CS-TOX500TW", "our": 35.99, "item": "Tait Orca 5000 对讲机电池", "amz": [{"t": "VINTRONS Tait 625P/ORCA5015/5030/5000", "p": 65.00}, {"t": "VINTRONS TAIT 5030/5040", "p": 63.63}, {"t": "VINTRONS TAIT 5030/Excel/5015/Eclipse/5000", "p": 63.63}], "verdict": "便宜43%"},
+    {"sku": "CS-DEL552NB", "our": 44.99, "item": "Dell Precision 3560 电池", "amz": [{"t": "RJ40G 63Wh Latitude5420/5520/Precision3560", "p": 47.25}, {"t": "69KF2 86Wh", "p": null}, {"t": "M5Y1K", "p": null}], "verdict": "持平(-5%)"},
+    {"sku": "CS-SMR365SH", "our": 19.99, "item": "三星 Gear Fit2 Pro 电池", "amz": [{"t": "Cameron Sino 同款", "p": null}, {"t": "CS NEW 200mAh", "p": null}, {"t": "iTopZea EB-BR365ABE", "p": null}], "verdict": "全部无BuyBox,无比价"},
+    {"sku": "CS-ABL100VX", "our": 139.99, "item": "Wolf Garten 割草机电池", "amz": [{"t": "VINTRONS R10Ac/R10D/R30Ac/R50Ac 同款", "p": 174.00}], "verdict": "便宜20%"},
+    {"sku": "CS-MVS500VX", "our": 27.99, "item": "小米 G1 扫地机电池", "amz": [{"t": "OUTMX 14.4V 4000mAh x2", "p": null}, {"t": "14.4V MI G1 替换", "p": 58.39}], "verdict": "便宜52%"},
+    {"sku": "CS-CHM170PR", "our": 20.99, "item": "NTN LT2001 寻呼机电池", "amz": [{"t": "Minitor V 消防寻呼(近似)", "p": 29.99}], "verdict": "无同款,近似-30%"},
+    {"sku": "CS-FNT250TW", "our": 31.99, "item": "八重洲 FT-25R/SBR-25L 电池", "amz": [{"t": "SBR-25Li 1950mAh", "p": 27.99}, {"t": "VINTRONS SBR-25L", "p": 36.87}], "verdict": "居中(比最低+14%/比VINTRONS-13%)"},
+    {"sku": "CS-TMG610SL", "our": 19.99, "item": "TomTom Go610/4FA60 电池", "amz": [{"t": "VINTRONS 4FA60 x2", "p": 17.17}, {"t": "CS 同款", "p": null}], "verdict": "比最低贵16%"},
+    {"sku": "CS-ABM600SL", "our": 30.99, "item": "Lenovo ServeRaid 39R8812 电池", "amz": [{"t": "VINTRONS ServeRaid-8s 同款", "p": 32.72}], "verdict": "持平(-5%)"},
+    {"sku": "CS-SFM3SL", "our": 19.99, "item": "i-Audio X5 电池", "amz": [{"t": "VINTRONS COWON M3/X5", "p": 28.99}, {"t": "VINTRONS iAudio X5 1100mAh", "p": 22.25}], "verdict": "便宜10~31%"},
+    {"sku": "CS-DEW528PX", "our": 62.99, "item": "DeWalt DC528 电池", "amz": [{"t": "CS 同款3000mAh", "p": null}, {"t": "18V XRP 2pack 近似", "p": null}, {"t": "18V 5.0Ah 近似", "p": null}], "verdict": "全部无BuyBox,无比价"},
+    {"sku": "CS-EMC150LS", "our": 27.99, "item": "Saft 0120894-A 应急灯电池", "amz": [{"t": "VINTRONS Saft 0120894-A 同款", "p": 39.18}, {"t": "Dual-Lite 0120894 单件", "p": 8.39}], "verdict": "vs同款VINTRONS-29%,vs最低兼容+233%"},
+    {"sku": "CS-KOH300MD", "our": 27.99, "item": "IKO3 HeartMirror 心电图电池", "amz": [], "verdict": "亚马逊0结果,空白市场"},
+    {"sku": "CS-FVA034MD", "our": 28.99, "item": "Fresenius Volumat 输液泵电池", "amz": [{"t": "Heska Vet IV 泵(近似)", "p": 35.99}, {"t": "B.Braun Vista 泵(近似)", "p": 9.99}], "verdict": "无同款,近似区间$10-36居中"},
+    {"sku": "CS-ECR131VX", "our": 27.99, "item": "Ilife A4S 扫地机电池", "amz": [{"t": "CS 同款2200mAh", "p": null}, {"t": "W14.8V 3500mAh", "p": null}, {"t": "ILIFE A4s 3000mAh", "p": null}], "verdict": "全部无BuyBox,无比价"},
+    {"sku": "CS-P303CL", "our": 18.99, "item": "Radio Shack 431021 电话电池", "amz": [{"t": "VINTRONS 23197/431021 同款", "p": 20.17}, {"t": "Kastar 2pack 近型号", "p": null}], "verdict": "持平(-6%)"},
+    {"sku": "CS-RMA150MD", "our": 82.99, "item": "ResMed Astral150 呼吸机电池", "amz": [{"t": "CS 9000mAh 唯一listing", "p": null}], "verdict": "无竞争供给"},
+    {"sku": "CS-WGF300VX", "our": 21.99, "item": "Mannesmann 工具电池", "amz": [{"t": "Brueder M17691 近型号", "p": 82.00}], "verdict": "便宜73%"},
+    {"sku": "CS-BS3300PX", "our": 62.99, "item": "Ramset SBD12 射钉枪电池", "amz": [{"t": "CS 3000mAh 唯一listing", "p": null}], "verdict": "无竞争供给"}
+  ]
+}

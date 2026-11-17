@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "search": {
+      "type": "estry-battery-search",
+      "settings": {}
+    }
+  },
+  "order": [
+    "search"
+  ]
+}

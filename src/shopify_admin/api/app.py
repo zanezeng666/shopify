@@ -46,10 +46,10 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
 
     from shopify_admin.api.routers import (
-        finance, fulfillment, inventory, marketing, orders, products, reports, shipping, stores, tasks,
+        finance, fulfillment, google_ads, inventory, marketing, orders, products, reports, shipping, stores, tasks,
     )
 
-    for r in (stores, orders, products, inventory, fulfillment, finance, reports, marketing, shipping, tasks):
+    for r in (stores, orders, products, inventory, fulfillment, finance, reports, marketing, google_ads, shipping, tasks):
         app.include_router(r.router)
 
     @app.get("/health", tags=["meta"])

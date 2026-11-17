@@ -1,0 +1,134 @@
+- generic [active] [ref=f68e1]:
+  - link "Skip to content" [ref=f68e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - region "Announcement" [ref=f68e6]:
+    - paragraph [ref=f68e7]: 12-Month Warranty · 30-Day Easy Returns · Ships from US in 48h
+  - banner [ref=f68e10]:
+    - link "Estry" [ref=f68e11] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=f68e12]:
+      - list [ref=f68e13]:
+        - listitem [ref=f68e14]:
+          - group [ref=f68e16]:
+            - button "Tablets & Smartwatches" [ref=f68e17] [cursor=pointer]
+        - listitem [ref=f68e21]:
+          - group [ref=f68e23]:
+            - button "Computer Accessories" [ref=f68e24] [cursor=pointer]
+        - listitem [ref=f68e28]:
+          - group [ref=f68e30]:
+            - button "Drones & Security" [ref=f68e31] [cursor=pointer]
+        - listitem [ref=f68e35]:
+          - group [ref=f68e37]:
+            - button "Electronics" [ref=f68e38] [cursor=pointer]
+        - listitem [ref=f68e42]:
+          - group [ref=f68e44]:
+            - button "Communication" [ref=f68e45] [cursor=pointer]
+        - listitem [ref=f68e49]:
+          - group [ref=f68e51]:
+            - button "Tools & Industrial" [ref=f68e52] [cursor=pointer]
+        - listitem [ref=f68e56]:
+          - group [ref=f68e58]:
+            - button "Home & Care" [ref=f68e59] [cursor=pointer]
+        - listitem [ref=f68e63]:
+          - link "Medical" [ref=f68e64] [cursor=pointer]:
+            - /url: /collections/medical-battery
+        - listitem [ref=f68e66]:
+          - link "Shop All" [ref=f68e67] [cursor=pointer]:
+            - /url: /collections/all
+    - generic [ref=f68e69]:
+      - generic [ref=f68e73]:
+        - heading "Country/region" [level=2] [ref=f68e74]
+        - button "United States | USD $" [ref=f68e76] [cursor=pointer]
+      - group [ref=f68e81]:
+        - button "Search" [ref=f68e82] [cursor=pointer]
+      - button "Account" [ref=f68e90] [cursor=pointer]:
+        - generic: Log in
+      - link "Cart 22 items" [ref=f68e95] [cursor=pointer]:
+        - /url: /cart
+        - generic [ref=f68e99]: Cart
+        - generic [ref=f68e100]:
+          - generic [aria-hidden] [ref=f68e101]: "22"
+          - generic [ref=f68e102]: 22 items
+  - main [ref=f68e103]:
+    - region "Battery specification search" [ref=f68e105]:
+      - generic [ref=f68e107]:
+        - paragraph [ref=f68e108]: OEM Cross-Reference Database
+        - heading "Battery Specification Finder" [level=1] [ref=f68e109]
+        - generic [ref=f68e110]:
+          - searchbox "Search battery specifications" [ref=f68e111]: A1255WR
+          - button "Search" [ref=f68e112] [cursor=pointer]
+        - generic [ref=f68e117]: "Try:"
+      - generic [ref=f68e119]:
+        - complementary "Filters" [ref=f68e120]
+        - generic [ref=f68e121]:
+          - generic [ref=f68e122]:
+            - generic [ref=f68e123]: Loading database…
+            - generic [ref=f68e124]:
+              - generic [ref=f68e125]: Sort
+              - combobox "Sort" [ref=f68e126]:
+                - option "Best match" [selected]
+                - option "Model A-Z"
+                - option "Price low-high"
+                - option "Price high-low"
+          - generic [ref=f68e127]:
+            - table
+      - generic [ref=f68e129]:
+        - generic [ref=f68e130]:
+          - generic [ref=f68e131]: Can't find a model? Need bulk pricing?
+          - generic [ref=f68e132]: Send us your part list — quotes within 24 hours, MOQ-friendly.
+          - generic [ref=f68e133]: "Volume discounts: 10+ −5% · 20+ −6% · 50+ −8% · 100+ −10% — automatic at checkout"
+        - link "Request Bulk Quote" [ref=f68e134] [cursor=pointer]:
+          - /url: /pages/wholesale
+  - contentinfo [ref=f68e136]:
+    - generic [ref=f68e139]:
+      - heading "Subscribe to our emails" [level=2] [ref=f68e140]
+      - generic [ref=f68e143]:
+        - textbox "Email" [ref=f68e144]
+        - generic: Email
+        - button "Subscribe" [ref=f68e145] [cursor=pointer]
+    - generic [ref=f68e149]:
+      - generic [ref=f68e150]:
+        - generic [ref=f68e151]:
+          - generic [ref=f68e152]: "B2B & Wholesale:"
+          - link "Battery Finder" [ref=f68e153] [cursor=pointer]:
+            - /url: /pages/battery-search
+          - link "Spec Sheets" [ref=f68e154] [cursor=pointer]:
+            - /url: /pages/specification
+          - link "Wholesale Quotes" [ref=f68e155] [cursor=pointer]:
+            - /url: /pages/wholesale
+          - link "Certificates" [ref=f68e156] [cursor=pointer]:
+            - /url: /pages/certificates
+        - generic [ref=f68e160]:
+          - heading "Country/region" [level=2] [ref=f68e161]
+          - button "United States | USD $" [ref=f68e163] [cursor=pointer]
+        - generic [ref=f68e168]:
+          - generic [ref=f68e169]: Payment methods
+          - list [ref=f68e170]:
+            - listitem [ref=f68e171]:
+              - img "PayPal" [ref=f68e172]
+            - listitem [ref=f68e178]:
+              - img "Venmo" [ref=f68e179]
+      - generic [ref=f68e185]:
+        - generic [ref=f68e186]:
+          - text: © 2026,
+          - link "Estry" [ref=f68e187] [cursor=pointer]:
+            - /url: /
+        - link "Powered by Shopify" [ref=f68e189] [cursor=pointer]:
+          - /url: https://www.shopify.com?utm_campaign=poweredby&utm_medium=shopify&utm_source=onlinestore
+        - list [ref=f68e190]:
+          - listitem [ref=f68e191]:
+            - text: ·
+            - link "Refund policy" [ref=f68e193] [cursor=pointer]:
+              - /url: /policies/refund-policy
+          - listitem [ref=f68e194]:
+            - text: ·
+            - link "Privacy policy" [ref=f68e196] [cursor=pointer]:
+              - /url: /policies/privacy-policy
+          - listitem [ref=f68e197]:
+            - text: ·
+            - link "Terms of service" [ref=f68e199] [cursor=pointer]:
+              - /url: /policies/terms-of-service
+          - listitem [ref=f68e200]:
+            - text: ·
+            - link "Shipping policy" [ref=f68e202] [cursor=pointer]:
+              - /url: /policies/shipping-policy

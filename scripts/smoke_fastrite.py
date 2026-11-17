@@ -14,12 +14,19 @@ inv = ch.get_inventory("BM-DET400G01")
 print(f"inventory BM-DET400G01: available={inv.available} warehouses={inv.raw['warehouses']}")
 
 # 库存（库里有量的 SKU——从 stock_table 挑一个正库存的）
+import os
+
 import pymysql  # noqa: E402
 
-conn = pymysql.connect(
-    host="gz-cdb-aq76i6tl.sql.tencentcdb.com", port=63698,
-    user="root", password="Bomi@81001", database="fast_rite",
-)
+# 凭据走环境变量（本地 .env / 服务器环境注入），严禁硬编码入库
+_dsn = os.environ.get("FASTRITE_DSN", "")
+if not _dsn:
+    raise SystemExit("请设置 FASTRITE_DSN=mysql://user:password@host:port/fast_rite（见 .env.example）")
+_user, _rest = _dsn.split("://", 1)[1].split(":", 1)
+_pass, _hostpart = _rest.rsplit("@", 1)
+_host, _port_db = _hostpart.split(":", 1)
+_port, _db = _port_db.split("/", 1)
+conn = pymysql.connect(host=_host, port=int(_port), user=_user, password=_pass, database=_db)
 cur = conn.cursor()
 cur.execute(
     "SELECT sku, whCode, productStockDtl_availableAmount FROM stock_table "

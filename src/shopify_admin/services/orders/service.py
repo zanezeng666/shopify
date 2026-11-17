@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Any
+from urllib.parse import parse_qs, urlparse
 
 from loguru import logger
 from sqlalchemy import func, select
@@ -41,6 +42,26 @@ def _dec(value: Any) -> Decimal | None:
     if value is None or value == "":
         return None
     return Decimal(str(value))
+
+
+def _extract_gclid(o: dict) -> str:
+    """从 Shopify 订单 landing_site / referring_site 提取 Google Ads gclid。
+
+    Google Ads 点击进站后 URL 携带 ?gclid=xxx，Shopify 会把它留在
+    订单的 landing_site（下单那一刻的落地页）里。
+    """
+    for key in ("landing_site", "referring_site"):
+        url = o.get(key) or ""
+        if "gclid=" not in url:
+            continue
+        try:
+            qs = parse_qs(urlparse(url).query)
+        except ValueError:
+            continue
+        val = (qs.get("gclid") or [""])[0].strip()
+        if val:
+            return val
+    return ""
 
 
 class OrderService:
@@ -134,6 +155,8 @@ class OrderService:
         order.billing_address = o.get("billing_address")
         order.customer = o.get("customer")
         order.is_test = bool(o.get("test"))
+        # Google Ads 点击 ID（已有值不覆盖，重复同步幂等）
+        order.gclid = _extract_gclid(o) or order.gclid
         order.cancelled_at = _to_dt(o.get("cancelled_at"))
         order.closed_at = _to_dt(o.get("closed_at"))
         order.shopify_created_at = _to_dt(o.get("created_at"))

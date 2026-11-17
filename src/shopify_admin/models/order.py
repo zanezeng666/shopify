@@ -27,6 +27,7 @@ class Order(Base, TimestampMixin):
         UniqueConstraint("store_id", "shopify_order_id", name="uq_orders_store_soid"),
         Index("ix_orders_store_created", "store_id", "shopify_created_at"),
         Index("ix_orders_local_status", "local_status"),
+        Index("ix_orders_gclid", "gclid"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -54,6 +55,8 @@ class Order(Base, TimestampMixin):
     billing_address: Mapped[dict | None] = mapped_column(JSON, default=None)
     customer: Mapped[dict | None] = mapped_column(JSON, default=None)
     is_test: Mapped[bool] = mapped_column(default=False, comment="Shopify 测试单")
+    gclid: Mapped[str] = mapped_column(String(255), default="", comment="Google Ads 点击 ID（landing_site 提取，转化回传键）")
+    ads_uploaded_at: Mapped[datetime | None] = mapped_column(DateTime, default=None, comment="转化回传 Google Ads 时间（空=未回传）")
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
     closed_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
     shopify_created_at: Mapped[datetime | None] = mapped_column(DateTime, default=None, comment="拉单游标")
