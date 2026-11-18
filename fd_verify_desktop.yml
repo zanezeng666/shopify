@@ -1,0 +1,260 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - region "Announcement" [ref=e6]:
+    - paragraph [ref=e7]: 12-Month Warranty · 30-Day Easy Returns · Ships from US in 48h
+  - banner [ref=e10]:
+    - link [ref=e11] [cursor=pointer]:
+      - /url: /
+      - img "Estry" [ref=e13]
+    - navigation [ref=e14]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - group [ref=e18]:
+            - button "Tablets & Smartwatches" [ref=e19] [cursor=pointer]
+        - listitem [ref=e23]:
+          - group [ref=e25]:
+            - button "Computer Accessories" [ref=e26] [cursor=pointer]
+        - listitem [ref=e30]:
+          - group [ref=e32]:
+            - button "Drones & Security" [ref=e33] [cursor=pointer]
+        - listitem [ref=e37]:
+          - group [ref=e39]:
+            - button "Electronics" [ref=e40] [cursor=pointer]
+        - listitem [ref=e44]:
+          - group [ref=e46]:
+            - button "Communication" [ref=e47] [cursor=pointer]
+        - listitem [ref=e51]:
+          - group [ref=e53]:
+            - button "Tools & Industrial" [ref=e54] [cursor=pointer]
+        - listitem [ref=e58]:
+          - group [ref=e60]:
+            - button "Home & Care" [ref=e61] [cursor=pointer]
+        - listitem [ref=e65]:
+          - link "Medical" [ref=e66] [cursor=pointer]:
+            - /url: /collections/medical-battery
+        - listitem [ref=e68]:
+          - link "Shop All" [ref=e69] [cursor=pointer]:
+            - /url: /collections/all
+    - generic [ref=e71]:
+      - generic [ref=e75]:
+        - heading "Country/region" [level=2] [ref=e76]
+        - button "United States | USD $" [ref=e78] [cursor=pointer]
+      - group [ref=e83]:
+        - button "Search" [ref=e84] [cursor=pointer]
+      - button "Account" [ref=e92] [cursor=pointer]:
+        - generic: Log in
+      - link "Cart" [ref=e97] [cursor=pointer]:
+        - /url: /cart
+  - main [ref=e102]:
+    - generic [ref=e107]:
+      - region "Gallery Viewer" [ref=e109]:
+        - generic [ref=e110]:
+          - link "Skip to product information" [ref=e111] [cursor=pointer]:
+            - /url: "#ProductInfo-template--28543174181108__main"
+          - list [ref=e112]:
+            - listitem [ref=e113]:
+              - generic [ref=e115]:
+                - button "Open media 1 in modal"
+            - listitem [ref=e124]:
+              - generic [ref=e126]:
+                - button "Open media 2 in modal"
+            - listitem [ref=e135]:
+              - generic [ref=e137]:
+                - button "Open media 3 in modal"
+            - listitem [ref=e146]:
+              - generic [ref=e148]:
+                - button "Open media 4 in modal"
+      - generic [ref=e158]:
+        - paragraph [ref=e159]: Estry
+        - heading "Battery for Creative Zen Vision M Zen Vision M Video DVP-HD0003 BA20603R79914" [level=1] [ref=e161]
+        - status [ref=e162]:
+          - generic [ref=e163]:
+            - generic [ref=e165]:
+              - generic [ref=e166]: Regular price
+              - generic [ref=e167]: $22.99 USD
+              - generic [ref=e169]: Sale price
+              - generic [ref=e170]: $18.99 USD
+            - generic [ref=e171]: Sale
+        - generic [ref=e172]:
+          - link "Shipping" [ref=e173] [cursor=pointer]:
+            - /url: /policies/shipping-policy
+          - text: calculated at checkout.
+        - generic [ref=e175]:
+          - generic [ref=e176]: Factory Direct — Lowest Official Price
+          - paragraph [ref=e177]: We are the manufacturer. Marketplaces charge ~15% in seller fees — buy factory direct and those savings go to you.
+        - group "Title" [ref=e179]:
+          - radio "1700mAh" [checked] [ref=e181]
+          - generic [ref=e182] [cursor=pointer]: 1700mAh
+        - generic [ref=e183]:
+          - generic [ref=e184]: Quantity
+          - generic "Quantity" [ref=e185]
+          - generic [ref=e187]:
+            - button "Decrease quantity for Battery for Creative Zen Vision M Zen Vision M Video DVP-HD0003 BA20603R79914" [ref=e188]
+            - spinbutton "Quantity" [ref=e190]: "1"
+            - button "Increase quantity for Battery for Creative Zen Vision M Zen Vision M Video DVP-HD0003 BA20603R79914" [ref=e191] [cursor=pointer]
+        - generic [ref=e196]:
+          - button "Add to cart" [ref=e197] [cursor=pointer]
+          - generic [ref=e200]:
+            - iframe [ref=e204]:
+              - generic "Payment Button" [ref=f5e2]:
+                - link "Pay with PayPal" [ref=f5e5] [cursor=pointer]
+            - link "More payment options" [ref=e206] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=e207]:
+          - link "View Full Specs" [ref=e208] [cursor=pointer]:
+            - /url: /pages/specification?m=CS-DA006SL
+          - link "Bulk Quote" [ref=e212] [cursor=pointer]:
+            - /url: /pages/wholesale?m=CS-DA006SL#wsi-md
+        - generic [ref=e216]:
+          - generic [ref=e217]: Volume discounts — automatic at checkout
+          - table [ref=e218]:
+            - rowgroup [ref=e219]:
+              - row [ref=e220]:
+                - columnheader "Quantity" [ref=e221]
+                - columnheader "Discount" [ref=e222]
+                - columnheader "Unit price" [ref=e223]
+            - rowgroup [ref=e224]:
+              - row [ref=e225]:
+                - cell "10+ pcs" [ref=e226]
+                - cell "−5%" [ref=e227]
+                - cell "$18.04" [ref=e228]
+              - row [ref=e229]:
+                - cell "20+ pcs" [ref=e230]
+                - cell "−6%" [ref=e231]
+                - cell "$17.85" [ref=e232]
+              - row [ref=e233]:
+                - cell "50+ pcs" [ref=e234]
+                - cell "−8%" [ref=e235]
+                - cell "$17.47" [ref=e236]
+              - row [ref=e237]:
+                - cell "100+ pcs" [ref=e238]
+                - cell "−10%" [ref=e239]
+                - cell "$17.09" [ref=e240]
+          - paragraph [ref=e241]: Counts your whole cart — mix & match any models. Applied automatically at checkout.
+        - generic [ref=e242]:
+          - generic [ref=e243]:
+            - generic [ref=e244]: 12-Month Warranty
+            - generic [ref=e245]: 30-Day Easy Returns
+            - generic [ref=e246]: Ships from US in 48h
+            - generic [ref=e247]: UN38.3 & ISO9001 Certified
+          - paragraph [ref=e248]: This is a 1500mAh 3.7V Li-Polymer replacement battery for Creative Zen Vision M, Zen Vision M Video, compatible with battery part numbers DVP-HD0003, BA20603R79914.
+          - heading "Battery Specifications" [level=3] [ref=e249]
+          - table [ref=e250]:
+            - rowgroup [ref=e251]:
+              - row [ref=e252]:
+                - cell "Type:" [ref=e253]
+                - cell "Li-Polymer" [ref=e254]
+              - row [ref=e255]:
+                - cell "Weight:" [ref=e256]
+                - cell "74.0g" [ref=e257]
+              - row [ref=e258]:
+                - cell "Dimension:" [ref=e259]
+                - cell "85.8*49.1*3.95mm" [ref=e260]
+              - row [ref=e261]:
+                - cell "Category:" [ref=e262]
+                - cell "Media Player" [ref=e263]
+              - row [ref=e264]:
+                - cell "Voltage:" [ref=e265]
+                - cell "3.7V" [ref=e266]
+              - row [ref=e267]:
+                - cell "Rate:" [ref=e268]
+                - cell "5.55Wh" [ref=e269]
+          - generic [ref=e270]:
+            - heading "Compatible Brand" [level=3] [ref=e271]
+            - list [ref=e272]:
+              - listitem [ref=e273]: Creative
+            - heading "Compatible Model" [level=3] [ref=e274]
+            - list [ref=e275]:
+              - listitem [ref=e276]: Zen Vision M
+              - listitem [ref=e277]: Zen Vision M Video
+            - heading "Compatible Battery Part Number" [level=3] [ref=e278]
+            - list [ref=e279]:
+              - listitem [ref=e280]: DVP-HD0003
+              - listitem [ref=e281]: BA20603R79914
+          - heading "⚠ Safety Warnings" [level=3] [ref=e282]
+          - list [ref=e284]:
+            - listitem [ref=e285]: Do not disassemble, puncture or modify the battery.
+            - listitem [ref=e286]: Never short-circuit the terminals or expose to heat / fire.
+            - listitem [ref=e287]: Do not mix with different batteries or chargers.
+            - listitem [ref=e288]: Recycle used batteries at designated collection points.
+          - heading "Why Choose Estry" [level=3] [ref=e289]
+          - generic [ref=e290]:
+            - generic [ref=e291]: ✓ Grade A Cells — Premium cells with stable discharge and low self-discharge.
+            - generic [ref=e292]: ✓ Real Capacity — Capacity tested to match or exceed the original battery.
+            - generic [ref=e293]: ✓ Strict QC — Every battery passes charging/discharging and safety checks.
+          - generic [ref=e294]: UN38.3 tested for safe transport. MSDS available upon request. Manufactured in an ISO9001 certified facility.
+          - heading "FAQ" [level=3] [ref=e295]
+          - group [ref=e296]:
+            - generic "How do I confirm this battery fits my device?" [ref=e297] [cursor=pointer]
+          - group [ref=e298]:
+            - generic "What is the warranty policy?" [ref=e299] [cursor=pointer]
+          - group [ref=e300]:
+            - generic "How fast will my order arrive?" [ref=e301] [cursor=pointer]
+        - group [ref=e303]:
+          - button [ref=e304] [cursor=pointer]
+  - contentinfo [ref=e314]:
+    - generic [ref=e317]:
+      - heading "Subscribe to our emails" [level=2] [ref=e318]
+      - generic [ref=e321]:
+        - textbox "Email" [ref=e322]
+        - generic: Email
+        - button "Subscribe" [ref=e323] [cursor=pointer]
+    - generic [ref=e327]:
+      - generic [ref=e328]:
+        - generic [ref=e329]:
+          - generic [ref=e330]: "B2B & Wholesale:"
+          - link "Battery Finder" [ref=e331] [cursor=pointer]:
+            - /url: /pages/battery-search
+          - link "Spec Sheets" [ref=e332] [cursor=pointer]:
+            - /url: /pages/specification
+          - link "Wholesale Quotes" [ref=e333] [cursor=pointer]:
+            - /url: /pages/wholesale
+          - link "Certificates" [ref=e334] [cursor=pointer]:
+            - /url: /pages/certificates
+        - generic [ref=e338]:
+          - heading "Country/region" [level=2] [ref=e339]
+          - button "United States | USD $" [ref=e341] [cursor=pointer]
+        - generic [ref=e346]:
+          - generic [ref=e347]: Payment methods
+          - list [ref=e348]:
+            - listitem [ref=e349]:
+              - img "PayPal" [ref=e350]
+            - listitem [ref=e356]:
+              - img "Venmo" [ref=e357]
+      - generic [ref=e363]:
+        - generic [ref=e364]:
+          - text: © 2026,
+          - link "Estry" [ref=e365] [cursor=pointer]:
+            - /url: /
+        - link "Powered by Shopify" [ref=e367] [cursor=pointer]:
+          - /url: https://www.shopify.com?utm_campaign=poweredby&utm_medium=shopify&utm_source=onlinestore
+        - list [ref=e368]:
+          - listitem [ref=e369]:
+            - text: ·
+            - link "Refund policy" [ref=e371] [cursor=pointer]:
+              - /url: /policies/refund-policy
+          - listitem [ref=e372]:
+            - text: ·
+            - link "Privacy policy" [ref=e374] [cursor=pointer]:
+              - /url: /policies/privacy-policy
+          - listitem [ref=e375]:
+            - text: ·
+            - link "Terms of service" [ref=e377] [cursor=pointer]:
+              - /url: /policies/terms-of-service
+          - listitem [ref=e378]:
+            - text: ·
+            - link "Shipping policy" [ref=e380] [cursor=pointer]:
+              - /url: /policies/shipping-policy
+          - listitem [ref=e381]:
+            - text: ·
+            - link "About Us" [ref=e383] [cursor=pointer]:
+              - /url: /pages/about
+          - listitem [ref=e384]:
+            - text: ·
+            - link "FAQ" [ref=e386] [cursor=pointer]:
+              - /url: /pages/faq
+          - listitem [ref=e387]:
+            - text: ·
+            - link "Warranty" [ref=e389] [cursor=pointer]:
+              - /url: /pages/warranty

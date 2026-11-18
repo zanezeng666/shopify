@@ -1,0 +1,261 @@
+- generic [active] [ref=f13e1]:
+  - link "Skip to content" [ref=f13e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - region "Announcement" [ref=f13e6]:
+    - paragraph [ref=f13e7]: 12-Month Warranty · 30-Day Easy Returns · Ships from US in 48h
+  - banner [ref=f13e10]:
+    - link [ref=f13e11] [cursor=pointer]:
+      - /url: /
+      - img "Estry" [ref=f13e13]
+    - navigation [ref=f13e14]:
+      - list [ref=f13e15]:
+        - listitem [ref=f13e16]:
+          - group [ref=f13e18]:
+            - button "Tablets & Smartwatches" [ref=f13e19] [cursor=pointer]
+        - listitem [ref=f13e23]:
+          - group [ref=f13e25]:
+            - button "Computer Accessories" [ref=f13e26] [cursor=pointer]
+        - listitem [ref=f13e30]:
+          - group [ref=f13e32]:
+            - button "Drones & Security" [ref=f13e33] [cursor=pointer]
+        - listitem [ref=f13e37]:
+          - group [ref=f13e39]:
+            - button "Electronics" [ref=f13e40] [cursor=pointer]
+        - listitem [ref=f13e44]:
+          - group [ref=f13e46]:
+            - button "Communication" [ref=f13e47] [cursor=pointer]
+        - listitem [ref=f13e51]:
+          - group [ref=f13e53]:
+            - button "Tools & Industrial" [ref=f13e54] [cursor=pointer]
+        - listitem [ref=f13e58]:
+          - group [ref=f13e60]:
+            - button "Home & Care" [ref=f13e61] [cursor=pointer]
+        - listitem [ref=f13e65]:
+          - link "Medical" [ref=f13e66] [cursor=pointer]:
+            - /url: /collections/medical-battery
+        - listitem [ref=f13e68]:
+          - link "Shop All" [ref=f13e69] [cursor=pointer]:
+            - /url: /collections/all
+    - generic [ref=f13e71]:
+      - generic [ref=f13e75]:
+        - heading "Country/region" [level=2] [ref=f13e76]
+        - button "United States | USD $" [ref=f13e78] [cursor=pointer]
+      - group [ref=f13e83]:
+        - button "Search" [ref=f13e84] [cursor=pointer]
+      - button "Account" [ref=f13e92] [cursor=pointer]:
+        - generic: Log in
+      - link "Cart" [ref=f13e97] [cursor=pointer]:
+        - /url: /cart
+  - main [ref=f13e102]:
+    - generic [ref=f13e107]:
+      - region "Gallery Viewer" [ref=f13e109]:
+        - generic [ref=f13e110]:
+          - link "Skip to product information" [ref=f13e111] [cursor=pointer]:
+            - /url: "#ProductInfo-template--28252563472628__main"
+          - list [ref=f13e112]:
+            - listitem [ref=f13e113]:
+              - generic [ref=f13e115]:
+                - button "Open media 1 in modal"
+            - listitem [ref=f13e124]:
+              - generic [ref=f13e126]:
+                - button "Open media 2 in modal"
+            - listitem [ref=f13e135]:
+              - generic [ref=f13e137]:
+                - button "Open media 3 in modal"
+            - listitem [ref=f13e146]:
+              - generic [ref=f13e148]:
+                - button "Open media 4 in modal"
+      - generic [ref=f13e158]:
+        - paragraph [ref=f13e159]: Estry
+        - heading "Battery for FOXLINK FLK644A" [level=1] [ref=f13e161]
+        - status [ref=f13e162]:
+          - generic [ref=f13e163]:
+            - generic [ref=f13e165]:
+              - generic [ref=f13e166]: Regular price
+              - generic [ref=f13e167]: $48.99 USD
+              - generic [ref=f13e169]: Sale price
+              - generic [ref=f13e170]: $40.99 USD
+            - generic [ref=f13e171]: Sold out
+        - generic [ref=f13e172]:
+          - link "Shipping" [ref=f13e173] [cursor=pointer]:
+            - /url: /policies/shipping-policy
+          - text: calculated at checkout.
+        - generic [ref=f13e175]:
+          - generic [ref=f13e176]: Factory Direct — Lowest Official Price
+          - paragraph [ref=f13e177]: We are the manufacturer. Marketplaces charge ~15% in seller fees — buy factory direct and those savings go to you.
+        - group "Title" [ref=f13e179]:
+          - radio "2200mAh Variant sold out or unavailable" [checked] [ref=f13e181]
+          - generic [ref=f13e182] [cursor=pointer]:
+            - text: 2200mAh
+            - generic [ref=f13e183]: Variant sold out or unavailable
+          - radio "3400mAh Variant sold out or unavailable" [ref=f13e184]
+          - generic [ref=f13e185] [cursor=pointer]:
+            - text: 3400mAh
+            - generic [ref=f13e186]: Variant sold out or unavailable
+        - generic [ref=f13e187]:
+          - generic [ref=f13e188]: Quantity
+          - generic "Quantity" [ref=f13e189]
+          - generic [ref=f13e191]:
+            - button "Decrease quantity for Battery for FOXLINK FLK644A" [ref=f13e192]
+            - spinbutton "Quantity" [ref=f13e194]: "1"
+            - button "Increase quantity for Battery for FOXLINK FLK644A" [ref=f13e195] [cursor=pointer]
+        - generic [ref=f13e200]:
+          - button "Sold out" [disabled] [ref=f13e201]
+          - generic [ref=f13e204]:
+            - iframe [ref=f13e208]:
+              - generic "Payment Button" [ref=f16e2]:
+                - link "Pay with PayPal" [ref=f16e5] [cursor=pointer]:
+                  - generic [ref=f16e7]: Pay with
+            - link "More payment options" [disabled] [ref=f13e211]
+        - generic [ref=f13e212]:
+          - link "View Full Specs" [ref=f13e213] [cursor=pointer]:
+            - /url: /pages/specification?m=CS-CPB013RC
+          - link "Bulk Quote" [ref=f13e217] [cursor=pointer]:
+            - /url: /pages/wholesale?m=CS-CPB013RC#wsi-md
+        - generic [ref=f13e221]:
+          - generic [ref=f13e222]: Volume discounts — automatic at checkout
+          - table [ref=f13e223]:
+            - rowgroup [ref=f13e224]:
+              - row [ref=f13e225]:
+                - columnheader "Quantity" [ref=f13e226]
+                - columnheader "Discount" [ref=f13e227]
+                - columnheader "Unit price" [ref=f13e228]
+            - rowgroup [ref=f13e229]:
+              - row [ref=f13e230]:
+                - cell "10+ pcs" [ref=f13e231]
+                - cell "−5%" [ref=f13e232]
+                - cell "$38.94" [ref=f13e233]
+              - row [ref=f13e234]:
+                - cell "20+ pcs" [ref=f13e235]
+                - cell "−6%" [ref=f13e236]
+                - cell "$38.53" [ref=f13e237]
+              - row [ref=f13e238]:
+                - cell "50+ pcs" [ref=f13e239]
+                - cell "−8%" [ref=f13e240]
+                - cell "$37.71" [ref=f13e241]
+              - row [ref=f13e242]:
+                - cell "100+ pcs" [ref=f13e243]
+                - cell "−10%" [ref=f13e244]
+                - cell "$36.89" [ref=f13e245]
+          - paragraph [ref=f13e246]: Counts your whole cart — mix & match any models. Applied automatically at checkout.
+        - generic [ref=f13e247]:
+          - generic [ref=f13e248]:
+            - generic [ref=f13e249]: 12-Month Warranty
+            - generic [ref=f13e250]: 30-Day Easy Returns
+            - generic [ref=f13e251]: Ships from US in 48h
+            - generic [ref=f13e252]: UN38.3 & ISO9001 Certified
+          - paragraph [ref=f13e253]: This is a 2200mAh 10.8V Li-ion replacement battery for FOXLINK devices, compatible with battery part numbers FLK644A.
+          - heading "Battery Specifications" [level=3] [ref=f13e254]
+          - table [ref=f13e255]:
+            - rowgroup [ref=f13e256]:
+              - row [ref=f13e257]:
+                - cell "Type:" [ref=f13e258]
+                - cell "Li-ion" [ref=f13e259]
+              - row [ref=f13e260]:
+                - cell "Weight:" [ref=f13e261]
+                - cell "230.0g" [ref=f13e262]
+              - row [ref=f13e263]:
+                - cell "Dimension:" [ref=f13e264]
+                - cell "83.28*61.0*21.0mm" [ref=f13e265]
+              - row [ref=f13e266]:
+                - cell "Category:" [ref=f13e267]
+                - cell "Cable Modem" [ref=f13e268]
+              - row [ref=f13e269]:
+                - cell "Voltage:" [ref=f13e270]
+                - cell "10.8V" [ref=f13e271]
+              - row [ref=f13e272]:
+                - cell "Rate:" [ref=f13e273]
+                - cell "23.76Wh" [ref=f13e274]
+          - generic [ref=f13e275]:
+            - heading "Compatible Brand" [level=3] [ref=f13e276]
+            - list [ref=f13e277]:
+              - listitem [ref=f13e278]: FOXLINK
+            - heading "Compatible Battery Part Number" [level=3] [ref=f13e279]
+            - list [ref=f13e280]:
+              - listitem [ref=f13e281]: FLK644A
+          - heading "⚠ Safety Warnings" [level=3] [ref=f13e282]
+          - list [ref=f13e284]:
+            - listitem [ref=f13e285]: Do not disassemble, puncture or modify the battery.
+            - listitem [ref=f13e286]: Never short-circuit the terminals or expose to heat / fire.
+            - listitem [ref=f13e287]: Do not mix with different batteries or chargers.
+            - listitem [ref=f13e288]: Recycle used batteries at designated collection points.
+          - heading "Why Choose Estry" [level=3] [ref=f13e289]
+          - generic [ref=f13e290]:
+            - generic [ref=f13e291]: ✓ Grade A Cells — Premium cells with stable discharge and low self-discharge.
+            - generic [ref=f13e292]: ✓ Real Capacity — Capacity tested to match or exceed the original battery.
+            - generic [ref=f13e293]: ✓ Strict QC — Every battery passes charging/discharging and safety checks.
+          - generic [ref=f13e294]: UN38.3 tested for safe transport. MSDS available upon request. Manufactured in an ISO9001 certified facility.
+          - heading "FAQ" [level=3] [ref=f13e295]
+          - group [ref=f13e296]:
+            - generic "How do I confirm this battery fits my device?" [ref=f13e297] [cursor=pointer]
+          - group [ref=f13e298]:
+            - generic "What is the warranty policy?" [ref=f13e299] [cursor=pointer]
+          - group [ref=f13e300]:
+            - generic "How fast will my order arrive?" [ref=f13e301] [cursor=pointer]
+        - group [ref=f13e303]:
+          - button [ref=f13e304] [cursor=pointer]
+  - contentinfo [ref=f13e314]:
+    - generic [ref=f13e317]:
+      - heading "Subscribe to our emails" [level=2] [ref=f13e318]
+      - generic [ref=f13e321]:
+        - textbox "Email" [ref=f13e322]
+        - generic: Email
+        - button "Subscribe" [ref=f13e323] [cursor=pointer]
+    - generic [ref=f13e327]:
+      - generic [ref=f13e328]:
+        - generic [ref=f13e329]:
+          - generic [ref=f13e330]: "B2B & Wholesale:"
+          - link "Battery Finder" [ref=f13e331] [cursor=pointer]:
+            - /url: /pages/battery-search
+          - link "Spec Sheets" [ref=f13e332] [cursor=pointer]:
+            - /url: /pages/specification
+          - link "Wholesale Quotes" [ref=f13e333] [cursor=pointer]:
+            - /url: /pages/wholesale
+          - link "Certificates" [ref=f13e334] [cursor=pointer]:
+            - /url: /pages/certificates
+        - generic [ref=f13e338]:
+          - heading "Country/region" [level=2] [ref=f13e339]
+          - button "United States | USD $" [ref=f13e341] [cursor=pointer]
+        - generic [ref=f13e346]:
+          - generic [ref=f13e347]: Payment methods
+          - list [ref=f13e348]:
+            - listitem [ref=f13e349]:
+              - img "PayPal" [ref=f13e350]
+            - listitem [ref=f13e356]:
+              - img "Venmo" [ref=f13e357]
+      - generic [ref=f13e363]:
+        - generic [ref=f13e364]:
+          - text: © 2026,
+          - link "Estry" [ref=f13e365] [cursor=pointer]:
+            - /url: /
+        - link "Powered by Shopify" [ref=f13e367] [cursor=pointer]:
+          - /url: https://www.shopify.com?utm_campaign=poweredby&utm_medium=shopify&utm_source=onlinestore
+        - list [ref=f13e368]:
+          - listitem [ref=f13e369]:
+            - text: ·
+            - link "Refund policy" [ref=f13e371] [cursor=pointer]:
+              - /url: /policies/refund-policy
+          - listitem [ref=f13e372]:
+            - text: ·
+            - link "Privacy policy" [ref=f13e374] [cursor=pointer]:
+              - /url: /policies/privacy-policy
+          - listitem [ref=f13e375]:
+            - text: ·
+            - link "Terms of service" [ref=f13e377] [cursor=pointer]:
+              - /url: /policies/terms-of-service
+          - listitem [ref=f13e378]:
+            - text: ·
+            - link "Shipping policy" [ref=f13e380] [cursor=pointer]:
+              - /url: /policies/shipping-policy
+          - listitem [ref=f13e381]:
+            - text: ·
+            - link "About Us" [ref=f13e383] [cursor=pointer]:
+              - /url: /pages/about
+          - listitem [ref=f13e384]:
+            - text: ·
+            - link "FAQ" [ref=f13e386] [cursor=pointer]:
+              - /url: /pages/faq
+          - listitem [ref=f13e387]:
+            - text: ·
+            - link "Warranty" [ref=f13e389] [cursor=pointer]:
+              - /url: /pages/warranty

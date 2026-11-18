@@ -28,3 +28,16 @@ Logs/
 _catmap.txt
 _recdiff.txt
 work_dirs_tmp_*.py
+
+# traffic_web scripts with hardcoded secrets (DB password / TRAFFIC_KEY) - DO NOT COMMIT
+deploy/traffic_web/check_jobs.py
+deploy/traffic_web/config_shipping.py
+deploy/traffic_web/gen_shipping_plan.py
+deploy/traffic_web/probe_cfg*.py
+deploy/traffic_web/probe_rates.py
+deploy/traffic_web/probe_sc*.py
+deploy/traffic_web/add_api_path.py
+deploy/traffic_web/deploy_links.sh
+deploy/traffic_web/redeploy.sh
+deploy/traffic_web/smoke.sh
+
