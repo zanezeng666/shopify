@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """流量质量看板：GA4 当日访客来源/国家/落地页/停留时间明细 + 自动质量标签（浅色主题）。
 访问：https://api.bornmieo.com/traffic/?k=<TRAFFIC_KEY>（key 在 /home/jason/shopify-admin/.env）
-GA4=313397200（Estry，property 时区 Asia/Shanghai）。数据缓存 5 分钟。"""
+GA4=313397200（Estry，property 时区 Asia/Shanghai）。
+双层：主表=runReport 当日（GA4 处理管道延迟 1~3h，缓存 2 分钟）；
+实时层=runRealtimeReport 最近 30 分钟（秒级新鲜，缓存 60 秒）。"""
 import datetime as dt
 import os
 import time
@@ -15,7 +17,8 @@ load_dotenv("/home/jason/shopify-admin/.env")
 
 GA4 = "313397200"
 KEY = os.environ.get("TRAFFIC_KEY", "")
-CACHE_TTL = 300  # 5 分钟
+CACHE_TTL = 120  # 主表 2 分钟：GA4 处理延迟之外的可见延迟压到最低
+RT_TTL = 60      # realtime 层 60 秒（30 分钟窗口，数据本身秒级新鲜）
 _req_cache: dict = {}          # {cache_key: (ts, payload)}
 _token = {"at": None, "exp": 0}
 _tz = {"name": None}
@@ -239,6 +242,71 @@ def _check_key(k: str | None):
         raise HTTPException(401, "invalid key")
 
 
+# ---------------------------------------------------------------- 实时层（最近 30 分钟）
+
+
+def runrealtime(body: dict) -> list:
+    """runRealtimeReport → rows；本 property 可用维度有限（无来源/落地页）：
+    country/city/deviceCategory/unifiedScreenName/eventName 等 ×
+    activeUsers/eventCount/screenPageViews/keyEvents。"""
+    r = httpx.post(
+        f"https://analyticsdata.googleapis.com/v1beta/properties/{GA4}"
+        ":runRealtimeReport",
+        headers={"Authorization": f"Bearer {_access_token()}",
+                 "Content-Type": "application/json"},
+        json=body, timeout=60)
+    if r.status_code != 200:
+        raise RuntimeError(f"GA4 realtime {r.status_code}: {r.text[:160]}")
+    return r.json().get("rows", [])
+
+
+def fetch_realtime() -> dict:
+    """最近 30 分钟活跃快照：秒级新鲜，弥补主表 1~3h 处理延迟。"""
+
+    def rt(dims: list, mets: list, limit: int = 100) -> list:
+        return runrealtime({
+            "dimensions": [{"name": d} for d in dims],
+            "metrics": [{"name": m} for m in mets],
+            "orderBys": [{"metric": {"metricName": mets[0]}, "desc": True}],
+            "limit": limit})
+
+    tot_rows = runrealtime({
+        "metrics": [{"name": m} for m in
+                    ("activeUsers", "eventCount", "screenPageViews",
+                     "keyEvents")], "limit": 1})
+    tv = ([int(float(m["value"])) for m in tot_rows[0]["metricValues"]]
+          if tot_rows else [0, 0, 0, 0])
+
+    geo = []
+    for r in rt(["country", "city", "deviceCategory"],
+                ["activeUsers", "eventCount", "keyEvents"], 200):
+        d = [x["value"] for x in r["dimensionValues"]]
+        m = [int(float(x["value"])) for x in r["metricValues"]]
+        geo.append({"country": d[0], "city": d[1], "device": d[2],
+                    "active": m[0], "events": m[1], "ke": m[2]})
+
+    screens = []
+    for r in rt(["unifiedScreenName"], ["activeUsers", "screenPageViews"], 40):
+        d = [x["value"] for x in r["dimensionValues"]]
+        if not d[0] or d[0] == "(not set)":
+            continue
+        m = [int(float(x["value"])) for x in r["metricValues"]]
+        screens.append({"title": d[0][:90], "active": m[0], "views": m[1]})
+
+    noise = {"page_view", "session_start", "user_engagement", "scroll"}
+    events = []
+    for r in rt(["eventName"], ["eventCount"], 50):
+        name = r["dimensionValues"][0]["value"]
+        if name in noise:
+            continue  # 平台噪音事件刷屏，行为类事件更有信息量
+        events.append({"event": name,
+                       "count": int(float(r["metricValues"][0]["value"]))})
+
+    return {"generatedAt": dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "active": tv[0], "events": tv[1], "views": tv[2], "ke": tv[3],
+            "geo": geo, "screens": screens, "eventsDetail": events}
+
+
 # ---------------------------------------------------------------- API/页面
 
 
@@ -257,6 +325,17 @@ def api_day(date: str = "today", k: str = ""):
         return hit[1]
     payload = fetch_day(d)
     _req_cache[ck] = (time.time(), payload)
+    return payload
+
+
+@app.get("/api/realtime")
+def api_realtime(k: str = ""):
+    _check_key(k)
+    hit = _req_cache.get(("rt",))
+    if hit and time.time() - hit[0] < RT_TTL:
+        return hit[1]
+    payload = fetch_realtime()
+    _req_cache[("rt",)] = (time.time(), payload)
     return payload
 
 
@@ -314,8 +393,9 @@ a.lk{color:var(--norm);text-decoration:none;
 border-bottom:1px dotted #8cacd0;cursor:pointer}
 a.lk:hover{border-bottom-style:solid}
 </style></head><body>
-<h1>流量质量看板 <span class="pill" id="gen"></span><span class="pill" id="tz"></span></h1>
-<div class="sub">按 GA4 媒体资源时区统计 · 当日数据延迟 1-3 小时 ·
+<h1>流量质量看板 <span class="pill" id="gen"></span><span class="pill" id="tz"></span><span class="pill" id="rtgen"></span></h1>
+<div class="sub">按 GA4 媒体资源时区统计 · 实时层=最近 30 分钟（秒级，60s 刷新）·
+主表=GA4 处理后数据（当日延迟 1~3 小时，2 分钟刷新）·
 优质=有事件或停留≥40s且参与≥30% · 低质=停留&lt;15s或参与&lt;8% ·
 Bot?=1页秒退零参与指纹</div>
 <div class="bar">
@@ -329,6 +409,24 @@ Bot?=1页秒退零参与指纹</div>
  <button class="fbtn" data-f="bot">疑似Bot</button>
 </div>
 <div class="note" id="note"></div>
+<h2>实时 · 最近 30 分钟
+<span class="pill" style="background:#dcffe4;color:var(--good)">秒级</span></h2>
+<div class="cards" id="rtcards"></div>
+<div style="overflow:auto;max-height:300px"><table id="rtgeo">
+<thead><tr><th>国家</th><th>城市</th><th>设备</th><th class="num">活跃</th>
+<th class="num">事件</th><th class="num">关键事件</th></tr></thead>
+<tbody></tbody></table></div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+ <div style="flex:1;min-width:360px"><h2>正在看的页面</h2>
+  <div style="overflow:auto;max-height:300px"><table id="rtscreens">
+  <thead><tr><th>页面标题</th><th class="num">活跃</th>
+  <th class="num">浏览</th></tr></thead><tbody></tbody></table></div></div>
+ <div style="flex:1;min-width:280px"><h2>实时事件（行为类）</h2>
+  <div style="overflow:auto;max-height:300px"><table id="rtevents">
+  <thead><tr><th>事件</th><th class="num">次数</th></tr></thead>
+  <tbody></tbody></table></div></div>
+</div>
+<h2>当日汇总（GA4 处理后 · 延迟 1~3 小时）</h2>
 <div class="cards" id="cards"></div>
 <h2>访客明细（来源 × 国家 × 城市 × 设备 × 落地页）</h2>
 <div class="bar"><input type="search" id="q" placeholder="搜索来源/国家/页面…"
@@ -386,15 +484,31 @@ function cards(t){const ev=t.events||{};
  ['购买',ev.purchase||0]].map(x=>
  '<div class="card"><div class="v">'+x[1]+'</div><div class="l">'+x[0]+
  '</div></div>').join('')}
-function tr(cls,cells){return '<tr class="'+cls+'">'+cells.map((c,i)=>
- '<td'+((typeof c==='object')?'':' class="'+(i>=6?'num':'')+'"')+'>'+
+function tr(cls,cells,numFrom=6){return '<tr class="'+cls+'">'+cells.map((c,i)=>
+ '<td'+((typeof c==='object')?'':' class="'+(i>=numFrom?'num':'')+'"')+'>'+
  (typeof c==='object'?c.v:c)+'</td>').join('')+'</tr>'}
+function renderRT(j){
+ $('#rtgen').textContent='实时 '+(j.generatedAt||'').split(' ')[1];
+ $('#rtcards').innerHTML=[
+ ['活跃用户',j.active],['浏览',j.views],['事件',j.events],['关键事件',j.ke]]
+ .map(x=>'<div class="card"><div class="v">'+x[1]+'</div><div class="l">'+x[0]+'</div></div>').join('');
+ $('#rtgeo tbody').innerHTML=j.geo.map(r=>tr('',[
+  {v:r.country==='United States'?'<span class="us">US</span>':r.country},
+  r.city,r.device,r.active,r.events,r.ke],3)).join('')
+  ||'<tr><td colspan="6">最近 30 分钟无活跃访客</td></tr>';
+ $('#rtscreens tbody').innerHTML=j.screens.map(s=>tr('',[s.title,s.active,s.views],1))
+  .join('')||'<tr><td colspan="3">无页面浏览</td></tr>';
+ $('#rtevents tbody').innerHTML=j.eventsDetail.map(e=>tr('',[e.event,e.count],1))
+  .join('')||'<tr><td colspan="2">最近 30 分钟无行为事件</td></tr>'}
+function loadRT(){fetch('api/realtime?k='+encodeURIComponent(K))
+ .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+ .then(j=>renderRT(j)).catch(()=>{})}
 function render(j){cards(j.totals);
  $('#gen').textContent=j.date+' · 更新 '+j.generatedAt;
  $('#tz').textContent='GA4 时区 '+(j.tz||'');
  const nb=$('#note');
  if(j.totals.sessions===0){nb.style.display='block';
-  nb.textContent='该日暂无会话数据——当日数据有 1-3 小时延迟，凌晨时段少属正常，可切“昨天”查看。'}
+  nb.textContent='该日主表暂无会话数据——GA4 处理延迟 1~3 小时，最新动态看上方实时层，或切“昨天”查看。'}
  else nb.style.display='none';
  const kw=($('#q').value||'').toLowerCase();
  const rows=j.detail.filter(r=>(filter==='all'||r.tag===filter)&&
@@ -411,7 +525,8 @@ function render(j){cards(j.totals);
   [{v:lk(p.url,p.path)},p.views,fm(p.durTotal),fm(p.durPerView)])).join('');
  $('#events tbody').innerHTML=j.eventDetail.map(e=>tr('',[e.event,e.srcmed,
   e.count])).join('')||'<tr><td colspan="3">当日无关键事件</td></tr>'}
-load('today');
-setInterval(()=>load(cur),300000);
+load('today');loadRT();
+setInterval(()=>load(cur),120000);
+setInterval(loadRT,60000);
 </script></body></html>
 """
